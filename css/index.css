@@ -3147,21 +3147,25 @@ h1.page-title + .tag-cloud-list {
   background-size: cover;
 }
 #footer-wrap {
-  position: relative;
-  padding: 40px 20px;
-  color: var(--light-grey);
+  position: absolute;
+  padding: 1.2rem 1rem 1.4rem;
+  color: #eee;
   text-align: center;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
 }
-#footer-wrap a {
+a {
   color: var(--light-grey);
 }
-#footer-wrap a:hover {
+a:hover {
   text-decoration: underline;
 }
-#footer-wrap .footer-separator {
+.footer-separator {
   margin: 0 4px;
 }
-#footer-wrap .icp-icon {
+.icp-icon {
   padding: 0 4px;
   max-height: 1.4em;
   width: auto;
