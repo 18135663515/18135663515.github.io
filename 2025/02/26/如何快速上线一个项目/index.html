@@ -1,0 +1,245 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>快速上线项目完整指南 | 社畜阿文</title><meta name="author" content="阿文"><meta name="copyright" content="阿文"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="如何快速上线一个项目？本文将从 需求分析 到 正式上线 分步骤讲解如何快速推进项目，涵盖工具链选择、开发流程优化、自动化部署等关键环节。  一、明确目标与需求1. 需求梳理 核心功能：明确项目必须完成的 MVP（最小可行产品）功能。 优先级排序：使用 MoSCoW 法则（Must have, Should have, Could have, Won’t have）划分优先级。 文档输出：用 Mar">
+<meta property="og:type" content="article">
+<meta property="og:title" content="快速上线项目完整指南">
+<meta property="og:url" content="http://example.com/2025/02/26/%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E4%B8%8A%E7%BA%BF%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE/index.html">
+<meta property="og:site_name" content="社畜阿文">
+<meta property="og:description" content="如何快速上线一个项目？本文将从 需求分析 到 正式上线 分步骤讲解如何快速推进项目，涵盖工具链选择、开发流程优化、自动化部署等关键环节。  一、明确目标与需求1. 需求梳理 核心功能：明确项目必须完成的 MVP（最小可行产品）功能。 优先级排序：使用 MoSCoW 法则（Must have, Should have, Could have, Won’t have）划分优先级。 文档输出：用 Mar">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/%E6%96%87%E7%AB%A0%E8%83%8C%E6%99%AF2.jpg">
+<meta property="article:published_time" content="2025-02-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-02-26T14:30:54.169Z">
+<meta property="article:author" content="阿文">
+<meta property="article:tag" content="项目管理">
+<meta property="article:tag" content="DevOps">
+<meta property="article:tag" content="部署">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/%E6%96%87%E7%AB%A0%E8%83%8C%E6%99%AF2.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "快速上线项目完整指南",
+  "url": "http://example.com/2025/02/26/%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E4%B8%8A%E7%BA%BF%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE/",
+  "image": "http://example.com/img/%E6%96%87%E7%AB%A0%E8%83%8C%E6%99%AF2.jpg",
+  "datePublished": "2025-02-25T16:00:00.000Z",
+  "dateModified": "2025-02-26T14:30:54.169Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "阿文",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/02/26/%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E4%B8%8A%E7%BA%BF%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-center"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '快速上线项目完整指南',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/TouXing.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/文章背景2.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">社畜阿文</span></a><a class="nav-page-title" href="/"><span class="site-name">快速上线项目完整指南</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">快速上线项目完整指南</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-02-25T16:00:00.000Z" title="发表于 2025-02-26 00:00:00">2025-02-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-02-26T14:30:54.169Z" title="更新于 2025-02-26 22:30:54">2025-02-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">875</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="如何快速上线一个项目？"><a href="#如何快速上线一个项目？" class="headerlink" title="如何快速上线一个项目？"></a>如何快速上线一个项目？</h1><p>本文将从 <strong>需求分析</strong> 到 <strong>正式上线</strong> 分步骤讲解如何快速推进项目，涵盖工具链选择、开发流程优化、自动化部署等关键环节。</p>
+<hr>
+<h2 id="一、明确目标与需求"><a href="#一、明确目标与需求" class="headerlink" title="一、明确目标与需求"></a>一、明确目标与需求</h2><h3 id="1-需求梳理"><a href="#1-需求梳理" class="headerlink" title="1. 需求梳理"></a>1. 需求梳理</h3><ul>
+<li><strong>核心功能</strong>：明确项目必须完成的 MVP（最小可行产品）功能。</li>
+<li><strong>优先级排序</strong>：使用 <strong>MoSCoW 法则</strong>（Must have, Should have, Could have, Won’t have）划分优先级。</li>
+<li><strong>文档输出</strong>：用 <strong>Markdown</strong> 或 <strong>Confluence</strong> 记录需求文档，确保团队对齐。</li>
+</ul>
+<h3 id="2-资源评估"><a href="#2-资源评估" class="headerlink" title="2. 资源评估"></a>2. 资源评估</h3><ul>
+<li><strong>团队分工</strong>：明确开发、测试、运维角色职责。</li>
+<li><strong>时间规划</strong>：使用甘特图（如 <a target="_blank" rel="noopener" href="https://github.com/features/issues">GitHub Projects</a> 或 <a target="_blank" rel="noopener" href="https://www.atlassian.com/software/jira">Jira</a>）拆分任务并设定里程碑。</li>
+<li><strong>技术选型</strong>：<ul>
+<li>前端：React&#x2F;Vue + Vite。</li>
+<li>后端：Spring Boot&#x2F;Node.js + Express。</li>
+<li>数据库：MySQL&#x2F;PostgreSQL&#x2F;MongoDB。</li>
+<li>部署：Docker + Kubernetes 或 Serverless（如 AWS Lambda）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="二、搭建开发环境"><a href="#二、搭建开发环境" class="headerlink" title="二、搭建开发环境"></a>二、搭建开发环境</h2><h3 id="1-初始化项目"><a href="#1-初始化项目" class="headerlink" title="1. 初始化项目"></a>1. 初始化项目</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 示例：使用 Vite 快速初始化前端项目</span><br><span class="line">npm create vite@latest my-project --template react-ts</span><br><span class="line">cd my-project</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+<h3 id="2-版本控制"><a href="#2-版本控制" class="headerlink" title="2. 版本控制"></a>2. 版本控制</h3><p>使用 Git 管理代码，推荐分支策略：<br>main：生产环境代码。</p>
+<p>dev：开发分支。</p>
+<p>feature&#x2F;*：功能分支。</p>
+<p>示例流程：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b dev</span><br><span class="line">git checkout -b feature/user-auth</span><br></pre></td></tr></table></figure>
+<h3 id="3-依赖管理"><a href="#3-依赖管理" class="headerlink" title="3. 依赖管理"></a>3. 依赖管理</h3><p>   前端：package.json + npm&#x2F;yarn&#x2F;pnpm。</p>
+<p>后端：pom.xml（Maven）或 requirements.txt（Python）。</p>
+<hr>
+<h2 id="三、开发与测试"><a href="#三、开发与测试" class="headerlink" title="三、开发与测试"></a>三、开发与测试</h2><h3 id="1-编码规范"><a href="#1-编码规范" class="headerlink" title="1. 编码规范"></a>1. 编码规范</h3><p>   使用 ESLint（前端）或 Checkstyle（Java）强制代码规范。</p>
+<p>配置 Git 提交规范（如 Commitizen）。</p>
+<h3 id="2-自动化测试"><a href="#2-自动化测试" class="headerlink" title="2. 自动化测试"></a>2. 自动化测试</h3><p>单元测试：Jest（JS）、JUnit（Java）、Pytest（Python）。</p>
+<p>集成测试：Postman + Newman（API 测试）。</p>
+<p>示例：在 CI 中运行测试</p>
+<figure class="highlight plaintext"><figcaption><span>GitHub Actions 示例</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- name: Run Tests</span><br><span class="line">  run: |</span><br><span class="line">    npm test</span><br><span class="line">    python -m pytest</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="3-持续集成（CI）"><a href="#3-持续集成（CI）" class="headerlink" title="3. 持续集成（CI）"></a>3. 持续集成（CI）</h3><p>工具推荐：GitHub Actions、GitLab CI、Jenkins。</p>
+<p>配置文件示例（.github&#x2F;workflows&#x2F;ci.yml）：</p>
+<figure class="highlight plaintext"><figcaption><span>CI Pipeline</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">on: [push]</span><br><span class="line">jobs:</span><br><span class="line">  build:</span><br><span class="line">    runs-on: ubuntu-latest</span><br><span class="line">    steps:</span><br><span class="line">      - uses: actions/checkout@v3</span><br><span class="line">      - name: Install Dependencies</span><br><span class="line">        run: npm install</span><br><span class="line">      - name: Run Tests</span><br><span class="line">        run: npm test</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、部署与监控"><a href="#四、部署与监控" class="headerlink" title="四、部署与监控"></a>四、部署与监控</h2><h3 id="1-容器化部署（Docker）"><a href="#1-容器化部署（Docker）" class="headerlink" title="1. 容器化部署（Docker）"></a>1. 容器化部署（Docker）</h3><h1 id="Dockerfile-示例（Node-js-后端）"><a href="#Dockerfile-示例（Node-js-后端）" class="headerlink" title="Dockerfile 示例（Node.js 后端）"></a>Dockerfile 示例（Node.js 后端）</h1><figure class="highlight plaintext"><figcaption><span>node:18-alpine</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">WORKDIR /app</span><br><span class="line">COPY package*.json ./</span><br><span class="line">RUN npm install</span><br><span class="line">COPY . .</span><br><span class="line">CMD [&quot;npm&quot;, &quot;start&quot;]</span><br></pre></td></tr></table></figure>
+<p>构建并推送镜像：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker build -t my-app:latest .</span><br><span class="line">docker tag my-app:latest my-registry/my-app:latest</span><br><span class="line">docker push my-registry/my-app:latest</span><br></pre></td></tr></table></figure>
+<h3 id="2-云服务部署"><a href="#2-云服务部署" class="headerlink" title="2. 云服务部署"></a>2. 云服务部署</h3><p>   Serverless：AWS Lambda + API Gateway（按需计费）。</p>
+<p>PaaS：Vercel（前端）、Heroku（全栈）。</p>
+<p>IaaS：AWS EC2、阿里云 ECS。</p>
+<h3 id="3-监控与日志"><a href="#3-监控与日志" class="headerlink" title="3. 监控与日志"></a>3. 监控与日志</h3><p>   监控工具：Prometheus + Grafana（指标监控）。</p>
+<p>日志管理：ELK Stack（Elasticsearch, Logstash, Kibana）。</p>
+<p>错误追踪：Sentry、Datadog。</p>
+<hr>
+<h2 id="五、上线流程"><a href="#五、上线流程" class="headerlink" title="五、上线流程"></a>五、上线流程</h2><h3 id="1-预发布验证"><a href="#1-预发布验证" class="headerlink" title="1. 预发布验证"></a>1. 预发布验证</h3><p>   蓝绿部署：通过流量切换验证新版本。</p>
+<p>金丝雀发布：逐步将流量导引到新版本。</p>
+<h3 id="2-正式上线"><a href="#2-正式上线" class="headerlink" title="2. 正式上线"></a>2. 正式上线</h3><p>   更新生产环境镜像：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl set image deployment/my-app my-app=my-registry/my-app:latest</span><br></pre></td></tr></table></figure>
+
+<p>使用 CDN 加速静态资源（如 Cloudflare、AWS CloudFront）。</p>
+<h3 id="3-回滚策略"><a href="#3-回滚策略" class="headerlink" title="3. 回滚策略"></a>3. 回滚策略</h3><p>   准备回滚脚本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Kubernetes 回滚示例</span><br><span class="line">kubectl rollout undo deployment/my-app</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、项目维护"><a href="#六、项目维护" class="headerlink" title="六、项目维护"></a>六、项目维护</h2><h3 id="1-自动化运维"><a href="#1-自动化运维" class="headerlink" title="1. 自动化运维"></a>1. 自动化运维</h3><p>   使用 Ansible 或 Terraform 管理基础设施。</p>
+<p>定期备份数据库（如 mysqldump 或 AWS RDS 快照）。</p>
+<h3 id="2-用户反馈"><a href="#2-用户反馈" class="headerlink" title="2. 用户反馈"></a>2. 用户反馈</h3><p>   集成用户反馈工具：Intercom、FeedbackFish。</p>
+<p>监控用户行为：Google Analytics、Hotjar。</p>
+<hr>
+<h2 id="七、工具链推荐"><a href="#七、工具链推荐" class="headerlink" title="七、工具链推荐"></a>七、工具链推荐</h2><h3 id="类别工具推荐"><a href="#类别工具推荐" class="headerlink" title="类别	工具推荐"></a>类别	工具推荐</h3><ol>
+<li><p>项目管理	Jira、Trello、Notion</p>
+</li>
+<li><p>代码托管	GitHub、GitLab、Bitbucket</p>
+</li>
+<li><p>CI&#x2F;CD	GitHub Actions、CircleCI、Jenkins</p>
+</li>
+<li><p>监控	    Prometheus、New Relic、Sentry</p>
+</li>
+<li><p>沟通协作	Slack、Microsoft Teams、飞书</p>
+</li>
+</ol>
+<hr>
+<h2 id="八、常见问题与解决"><a href="#八、常见问题与解决" class="headerlink" title="八、常见问题与解决"></a>八、常见问题与解决</h2><h3 id="1-需求变更频繁"><a href="#1-需求变更频繁" class="headerlink" title="1. 需求变更频繁"></a>1. 需求变更频繁</h3><h3 id="应对策略："><a href="#应对策略：" class="headerlink" title="应对策略："></a>应对策略：</h3><p>   采用敏捷开发（Scrum），每 2 周为一个迭代周期。</p>
+<h3 id="2-部署失败"><a href="#2-部署失败" class="headerlink" title="2. 部署失败"></a>2. 部署失败</h3><h3 id="排查步骤："><a href="#排查步骤：" class="headerlink" title="排查步骤："></a>排查步骤：</h3><p>检查日志：<code>kubectl logs &lt;pod-name&gt;</code>。</p>
+<p>回滚到上一版本。</p>
+<p>验证配置文件和网络权限。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">阿文</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/02/26/%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E4%B8%8A%E7%BA%BF%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE/">http://example.com/2025/02/26/%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E4%B8%8A%E7%BA%BF%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">社畜阿文</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</a><a class="post-meta__tags" href="/tags/DevOps/">DevOps</a><a class="post-meta__tags" href="/tags/%E9%83%A8%E7%BD%B2/">部署</a></div><div class="post-share"><div class="social-share" data-image="/img/%E6%96%87%E7%AB%A0%E8%83%8C%E6%99%AF2.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/%E5%BE%AE%E4%BF%A1.jpg" target="_blank"><img class="post-qr-code-img" src="/img/%E5%BE%AE%E4%BF%A1.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/%E6%94%AF%E4%BB%98%E5%AE%9D.jpg" target="_blank"><img class="post-qr-code-img" src="/img/%E6%94%AF%E4%BB%98%E5%AE%9D.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/02/26/Java%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/" title="🚀 Java 算法大全"><img class="cover" src="/img/4.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">🚀 Java 算法大全</div></div><div class="info-2"><div class="info-item-1">🚀 Java 算法大全：从常用到冷门，一网打尽！ 🌟 涵盖 35+ 种算法，附带代码实现、流程图解、适用场景对比！Emoji 标记快速定位，代码高亮 + 详细注释，助你快速掌握！   📊 排序算法🔥 常用排序1. 快速排序 (Quick Sort) | 🕒 O(n log n) | 🧠 分治思想1234567891011121314151617181920public static void quickSort(int[] arr, int low, int high) &#123;    if (low &lt; high) &#123;        int pivot = partition(arr, low, high); // 🎯 找基准点        quickSort(arr, low, pivot - 1);         // ⚡ 递归左半        quickSort(arr, pivot + 1, high);        // ⚡ 递归右半    &#125;&#125;private static int...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/02/26/Java%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/" title="🚀 Java 算法大全"><img class="cover" src="/img/4.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-26</div><div class="info-item-2">🚀 Java 算法大全</div></div><div class="info-2"><div class="info-item-1">🚀 Java 算法大全：从常用到冷门，一网打尽！ 🌟 涵盖 35+ 种算法，附带代码实现、流程图解、适用场景对比！Emoji 标记快速定位，代码高亮 + 详细注释，助你快速掌握！   📊 排序算法🔥 常用排序1. 快速排序 (Quick Sort) | 🕒 O(n log n) | 🧠 分治思想1234567891011121314151617181920public static void quickSort(int[] arr, int low, int high) &#123;    if (low &lt; high) &#123;        int pivot = partition(arr, low, high); // 🎯 找基准点        quickSort(arr, low, pivot - 1);         // ⚡ 递归左半        quickSort(arr, pivot + 1, high);        // ⚡ 递归右半    &#125;&#125;private static int...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/TouXing.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">阿文</div><div class="author-info-description">一个致力于分享知识，日常，沙雕的博主</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>视奸我</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎欢迎，热烈欢迎</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E4%B8%8A%E7%BA%BF%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">如何快速上线一个项目？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%98%8E%E7%A1%AE%E7%9B%AE%E6%A0%87%E4%B8%8E%E9%9C%80%E6%B1%82"><span class="toc-number">1.1.</span> <span class="toc-text">一、明确目标与需求</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%9C%80%E6%B1%82%E6%A2%B3%E7%90%86"><span class="toc-number">1.1.1.</span> <span class="toc-text">1. 需求梳理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%B5%84%E6%BA%90%E8%AF%84%E4%BC%B0"><span class="toc-number">1.1.2.</span> <span class="toc-text">2. 资源评估</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%90%AD%E5%BB%BA%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"><span class="toc-number">1.2.</span> <span class="toc-text">二、搭建开发环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%B9%E7%9B%AE"><span class="toc-number">1.2.1.</span> <span class="toc-text">1. 初始化项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6"><span class="toc-number">1.2.2.</span> <span class="toc-text">2. 版本控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86"><span class="toc-number">1.2.3.</span> <span class="toc-text">3. 依赖管理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%BC%80%E5%8F%91%E4%B8%8E%E6%B5%8B%E8%AF%95"><span class="toc-number">1.3.</span> <span class="toc-text">三、开发与测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83"><span class="toc-number">1.3.1.</span> <span class="toc-text">1. 编码规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95"><span class="toc-number">1.3.2.</span> <span class="toc-text">2. 自动化测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%EF%BC%88CI%EF%BC%89"><span class="toc-number">1.3.3.</span> <span class="toc-text">3. 持续集成（CI）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E9%83%A8%E7%BD%B2%E4%B8%8E%E7%9B%91%E6%8E%A7"><span class="toc-number">1.4.</span> <span class="toc-text">四、部署与监控</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%B9%E5%99%A8%E5%8C%96%E9%83%A8%E7%BD%B2%EF%BC%88Docker%EF%BC%89"><span class="toc-number">1.4.1.</span> <span class="toc-text">1. 容器化部署（Docker）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Dockerfile-%E7%A4%BA%E4%BE%8B%EF%BC%88Node-js-%E5%90%8E%E7%AB%AF%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">Dockerfile 示例（Node.js 后端）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%BA%91%E6%9C%8D%E5%8A%A1%E9%83%A8%E7%BD%B2"><span class="toc-number">2.0.1.</span> <span class="toc-text">2. 云服务部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E7%9B%91%E6%8E%A7%E4%B8%8E%E6%97%A5%E5%BF%97"><span class="toc-number">2.0.2.</span> <span class="toc-text">3. 监控与日志</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E4%B8%8A%E7%BA%BF%E6%B5%81%E7%A8%8B"><span class="toc-number">2.1.</span> <span class="toc-text">五、上线流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%A2%84%E5%8F%91%E5%B8%83%E9%AA%8C%E8%AF%81"><span class="toc-number">2.1.1.</span> <span class="toc-text">1. 预发布验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%AD%A3%E5%BC%8F%E4%B8%8A%E7%BA%BF"><span class="toc-number">2.1.2.</span> <span class="toc-text">2. 正式上线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%9B%9E%E6%BB%9A%E7%AD%96%E7%95%A5"><span class="toc-number">2.1.3.</span> <span class="toc-text">3. 回滚策略</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E9%A1%B9%E7%9B%AE%E7%BB%B4%E6%8A%A4"><span class="toc-number">2.2.</span> <span class="toc-text">六、项目维护</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%87%AA%E5%8A%A8%E5%8C%96%E8%BF%90%E7%BB%B4"><span class="toc-number">2.2.1.</span> <span class="toc-text">1. 自动化运维</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%94%A8%E6%88%B7%E5%8F%8D%E9%A6%88"><span class="toc-number">2.2.2.</span> <span class="toc-text">2. 用户反馈</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E5%B7%A5%E5%85%B7%E9%93%BE%E6%8E%A8%E8%8D%90"><span class="toc-number">2.3.</span> <span class="toc-text">七、工具链推荐</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E5%88%AB%E5%B7%A5%E5%85%B7%E6%8E%A8%E8%8D%90"><span class="toc-number">2.3.1.</span> <span class="toc-text">类别	工具推荐</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%B8%8E%E8%A7%A3%E5%86%B3"><span class="toc-number">2.4.</span> <span class="toc-text">八、常见问题与解决</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%9C%80%E6%B1%82%E5%8F%98%E6%9B%B4%E9%A2%91%E7%B9%81"><span class="toc-number">2.4.1.</span> <span class="toc-text">1. 需求变更频繁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E5%AF%B9%E7%AD%96%E7%95%A5%EF%BC%9A"><span class="toc-number">2.4.2.</span> <span class="toc-text">应对策略：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%83%A8%E7%BD%B2%E5%A4%B1%E8%B4%A5"><span class="toc-number">2.4.3.</span> <span class="toc-text">2. 部署失败</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%92%E6%9F%A5%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="toc-number">2.4.4.</span> <span class="toc-text">排查步骤：</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/02/26/AI%20%E5%85%A8%E8%A1%8C%E4%B8%9A%E5%BA%94%E7%94%A8%E6%8C%87%E5%8D%97%EF%BC%9A%E6%8F%90%E7%A4%BA%E8%AF%8D%E6%8A%80%E5%B7%A7%E3%80%81%E5%8A%9E%E5%85%AC%E4%BC%98%E5%8C%96%E4%B8%8E%E4%BB%A3%E7%A0%81%E5%AE%9E%E6%88%98/" title="🌟 AI 全行业应用指南：提示词技巧、办公优化与代码实战"><img src="/img/1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="🌟 AI 全行业应用指南：提示词技巧、办公优化与代码实战"/></a><div class="content"><a class="title" href="/2025/02/26/AI%20%E5%85%A8%E8%A1%8C%E4%B8%9A%E5%BA%94%E7%94%A8%E6%8C%87%E5%8D%97%EF%BC%9A%E6%8F%90%E7%A4%BA%E8%AF%8D%E6%8A%80%E5%B7%A7%E3%80%81%E5%8A%9E%E5%85%AC%E4%BC%98%E5%8C%96%E4%B8%8E%E4%BB%A3%E7%A0%81%E5%AE%9E%E6%88%98/" title="🌟 AI 全行业应用指南：提示词技巧、办公优化与代码实战">🌟 AI 全行业应用指南：提示词技巧、办公优化与代码实战</a><time datetime="2025-02-25T16:00:00.000Z" title="发表于 2025-02-26 00:00:00">2025-02-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/02/26/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E8%BF%9B%E9%98%B6%E8%AE%B2%E8%A7%A3&amp;%E9%94%81%E6%9C%BA%E5%88%B6/" title="Java 多线程进阶讲解与各种锁机制"><img src="/img/2.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java 多线程进阶讲解与各种锁机制"/></a><div class="content"><a class="title" href="/2025/02/26/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E8%BF%9B%E9%98%B6%E8%AE%B2%E8%A7%A3&amp;%E9%94%81%E6%9C%BA%E5%88%B6/" title="Java 多线程进阶讲解与各种锁机制">Java 多线程进阶讲解与各种锁机制</a><time datetime="2025-02-25T16:00:00.000Z" title="发表于 2025-02-26 00:00:00">2025-02-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/02/26/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E7%A1%80%E8%AE%B2%E8%A7%A3/" title="Java 多线程基础讲解"><img src="/img/3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java 多线程基础讲解"/></a><div class="content"><a class="title" href="/2025/02/26/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E7%A1%80%E8%AE%B2%E8%A7%A3/" title="Java 多线程基础讲解">Java 多线程基础讲解</a><time datetime="2025-02-25T16:00:00.000Z" title="发表于 2025-02-26 00:00:00">2025-02-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/02/26/Java%E5%AD%A6%E5%8E%86%E8%B7%AF%E5%BE%84/" title="Java 学习路径与注意事项"><img src="/img/%E6%96%87%E7%AB%A0%E8%83%8C%E6%99%AF1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java 学习路径与注意事项"/></a><div class="content"><a class="title" href="/2025/02/26/Java%E5%AD%A6%E5%8E%86%E8%B7%AF%E5%BE%84/" title="Java 学习路径与注意事项">Java 学习路径与注意事项</a><time datetime="2025-02-25T16:00:00.000Z" title="发表于 2025-02-26 00:00:00">2025-02-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/02/26/Java%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/" title="🚀 Java 算法大全"><img src="/img/4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="🚀 Java 算法大全"/></a><div class="content"><a class="title" href="/2025/02/26/Java%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/" title="🚀 Java 算法大全">🚀 Java 算法大全</a><time datetime="2025-02-25T16:00:00.000Z" title="发表于 2025-02-26 00:00:00">2025-02-26</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/文章背景2.jpg);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By 阿文</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.3</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
