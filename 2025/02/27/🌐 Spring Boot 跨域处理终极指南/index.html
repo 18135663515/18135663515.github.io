@@ -1,0 +1,382 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>🌐 Spring Boot 跨域处理终极指南 | 社畜阿文</title><meta name="author" content="阿文"><meta name="copyright" content="阿文"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="🌐 Spring Boot 跨域处理终极指南本文详细讲解 Spring Boot 项目中处理跨域问题的 4 种核心技巧，涵盖从基础概念到实战代码的完整解决方案，附代码注释和避坑指南，助你彻底解决跨域难题！🚀  目录 什么是跨域？ 理解 CORS Nginx 配置 配置类实现 addCorsMapping CorsFilter 过滤器模式 网关模式 方案对比总结   1. 什么是跨域？ 跨域（">
+<meta property="og:type" content="article">
+<meta property="og:title" content="🌐 Spring Boot 跨域处理终极指南">
+<meta property="og:url" content="http://example.com/2025/02/27/%F0%9F%8C%90%20Spring%20Boot%20%E8%B7%A8%E5%9F%9F%E5%A4%84%E7%90%86%E7%BB%88%E6%9E%81%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="社畜阿文">
+<meta property="og:description" content="🌐 Spring Boot 跨域处理终极指南本文详细讲解 Spring Boot 项目中处理跨域问题的 4 种核心技巧，涵盖从基础概念到实战代码的完整解决方案，附代码注释和避坑指南，助你彻底解决跨域难题！🚀  目录 什么是跨域？ 理解 CORS Nginx 配置 配置类实现 addCorsMapping CorsFilter 过滤器模式 网关模式 方案对比总结   1. 什么是跨域？ 跨域（">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/7.jpg">
+<meta property="article:published_time" content="2025-02-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-02-28T08:42:11.262Z">
+<meta property="article:author" content="阿文">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="SpringBoot">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/7.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "🌐 Spring Boot 跨域处理终极指南",
+  "url": "http://example.com/2025/02/27/%F0%9F%8C%90%20Spring%20Boot%20%E8%B7%A8%E5%9F%9F%E5%A4%84%E7%90%86%E7%BB%88%E6%9E%81%E6%8C%87%E5%8D%97/",
+  "image": "http://example.com/img/7.jpg",
+  "datePublished": "2025-02-26T16:00:00.000Z",
+  "dateModified": "2025-02-28T08:42:11.262Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "阿文",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/02/27/%F0%9F%8C%90%20Spring%20Boot%20%E8%B7%A8%E5%9F%9F%E5%A4%84%E7%90%86%E7%BB%88%E6%9E%81%E6%8C%87%E5%8D%97/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+  google_ad_client: '',
+  enable_page_level_ads: 'true'
+});</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-center"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '🌐 Spring Boot 跨域处理终极指南',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/TouXing.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 我们</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/7.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/%E5%8D%9A%E5%AE%A2.png" alt="Logo"><span class="site-name">社畜阿文</span></a><a class="nav-page-title" href="/"><span class="site-name">🌐 Spring Boot 跨域处理终极指南</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 我们</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">🌐 Spring Boot 跨域处理终极指南</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-02-26T16:00:00.000Z" title="发表于 2025-02-27 00:00:00">2025-02-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-02-28T08:42:11.262Z" title="更新于 2025-02-28 16:42:11">2025-02-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java/">Java</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java/SpringBoot/">SpringBoot</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><hr>
+<h1 id="🌐-Spring-Boot-跨域处理终极指南"><a href="#🌐-Spring-Boot-跨域处理终极指南" class="headerlink" title="🌐 Spring Boot 跨域处理终极指南"></a>🌐 Spring Boot 跨域处理终极指南</h1><p><strong>本文详细讲解 Spring Boot 项目中处理跨域问题的 <strong>4 种核心技巧</strong>，涵盖从基础概念到实战代码的完整解决方案，附</strong>代码注释<strong>和</strong>避坑指南<strong>，助你彻底解决跨域难题！🚀</strong></p>
+<hr>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol>
+<li><a href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E8%B7%A8%E5%9F%9F">什么是跨域？</a></li>
+<li><a href="#2-%E7%90%86%E8%A7%A3-cors">理解 CORS</a></li>
+<li><a href="#3-nginx-%E9%85%8D%E7%BD%AE">Nginx 配置</a></li>
+<li><a href="#4-%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%AE%9E%E7%8E%B0-addcorsmapping">配置类实现 addCorsMapping</a></li>
+<li><a href="#5-corsfilter-%E8%BF%87%E6%BB%A4%E5%99%A8%E6%A8%A1%E5%BC%8F">CorsFilter 过滤器模式</a></li>
+<li><a href="#6-%E7%BD%91%E5%85%B3%E6%A8%A1%E5%BC%8F">网关模式</a></li>
+<li><a href="#7-%E6%96%B9%E6%A1%88%E5%AF%B9%E6%AF%94%E6%80%BB%E7%BB%93">方案对比总结</a></li>
+</ol>
+<hr>
+<h2 id="1-什么是跨域？"><a href="#1-什么是跨域？" class="headerlink" title="1. 什么是跨域？"></a>1. 什么是跨域？</h2><ul>
+<li><strong>跨域（Cross-Origin）是浏览器基于 <strong>同源策略（Same-Origin Policy）</strong> 的安全限制。当以下</strong>任意一项不同**时，就会触发跨域：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>协议不同</td>
+<td><code>http://</code> vs <code>https://</code></td>
+</tr>
+<tr>
+<td>域名不同</td>
+<td><code>a.com</code> vs <code>b.com</code></td>
+</tr>
+<tr>
+<td>端口不同</td>
+<td><code>localhost:8080</code> vs <code>localhost:3000</code></td>
+</tr>
+</tbody></table>
+<p><img src="https://via.placeholder.com/600x200?text=CORS+Cross-Origin+Request" alt="跨域示意图"></p>
+<hr>
+<h2 id="2-理解-CORS"><a href="#2-理解-CORS" class="headerlink" title="2. 理解 CORS"></a>2. 理解 CORS</h2><ul>
+<li><strong>CORS（Cross-Origin Resource Sharing）</strong> 是现代浏览器支持的跨域解决方案，其核心是 <strong>HTTP 响应头</strong> 的协商机制：</li>
+</ul>
+<h3 id="CORS-关键响应头"><a href="#CORS-关键响应头" class="headerlink" title="CORS 关键响应头"></a>CORS 关键响应头</h3><table>
+<thead>
+<tr>
+<th>响应头</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Access-Control-Allow-Origin</code></td>
+<td>允许的源（域名）</td>
+</tr>
+<tr>
+<td><code>Access-Control-Allow-Methods</code></td>
+<td>允许的 HTTP 方法</td>
+</tr>
+<tr>
+<td><code>Access-Control-Allow-Headers</code></td>
+<td>允许的请求头</td>
+</tr>
+<tr>
+<td><code>Access-Control-Max-Age</code></td>
+<td>预检请求缓存时间（秒）</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="3-Nginx-配置"><a href="#3-Nginx-配置" class="headerlink" title="3. Nginx 配置"></a>3. Nginx 配置</h2><h3 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h3><ul>
+<li>通过 Nginx 反向代理统一处理跨域，<strong>无需修改代码</strong>。</li>
+</ul>
+<h3 id="配置示例"><a href="#配置示例" class="headerlink" title="配置示例"></a>配置示例</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span> api.yourdomain.com;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> / &#123;</span><br><span class="line">        <span class="comment"># 允许跨域的域名（* 表示允许任意域名）</span></span><br><span class="line">        <span class="attribute">add_header</span> <span class="string">&#x27;Access-Control-Allow-Origin&#x27;</span> <span class="string">&#x27;*&#x27;</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 允许的请求方法</span></span><br><span class="line">        <span class="attribute">add_header</span> <span class="string">&#x27;Access-Control-Allow-Methods&#x27;</span> <span class="string">&#x27;GET, POST, PUT, DELETE, OPTIONS&#x27;</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 允许的请求头</span></span><br><span class="line">        <span class="attribute">add_header</span> <span class="string">&#x27;Access-Control-Allow-Headers&#x27;</span> <span class="string">&#x27;Content-Type, Authorization&#x27;</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 处理预检请求</span></span><br><span class="line">        <span class="attribute">if</span> (<span class="variable">$request_method</span> = <span class="string">&#x27;OPTIONS&#x27;</span>) &#123;</span><br><span class="line">            <span class="attribute">add_header</span> <span class="string">&#x27;Access-Control-Max-Age&#x27;</span> <span class="number">1728000</span>;</span><br><span class="line">            <span class="attribute">add_header</span> <span class="string">&#x27;Content-Type&#x27;</span> <span class="string">&#x27;text/plain; charset=utf-8&#x27;</span>;</span><br><span class="line">            <span class="attribute">add_header</span> <span class="string">&#x27;Content-Length&#x27;</span> <span class="number">0</span>;</span><br><span class="line">            <span class="attribute">return</span> <span class="number">204</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">proxy_pass</span> http://localhost:8080;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="⚠️-注意事项"><a href="#⚠️-注意事项" class="headerlink" title="⚠️ 注意事项"></a>⚠️ 注意事项</h3><ol>
+<li>生产环境不要使用 <code>*</code> 通配符，应指定具体域名</li>
+<li>修改配置后需重载 Nginx：<code>nginx -s reload</code></li>
+</ol>
+<hr>
+<h2 id="4-配置类实现-addCorsMapping"><a href="#4-配置类实现-addCorsMapping" class="headerlink" title="4. 配置类实现 addCorsMapping"></a>4. 配置类实现 addCorsMapping</h2><h3 id="实现原理-1"><a href="#实现原理-1" class="headerlink" title="实现原理"></a>实现原理</h3><ul>
+<li><strong>通过 Spring Boot 的 <strong>WebMvcConfigurer</strong> 接口全局配置 CORS 规则。</strong></li>
+</ul>
+<h3 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.servlet.config.annotation.CorsRegistry;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.servlet.config.annotation.WebMvcConfigurer;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CorsConfig</span> <span class="keyword">implements</span> <span class="title class_">WebMvcConfigurer</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addCorsMappings</span><span class="params">(CorsRegistry registry)</span> &#123;</span><br><span class="line">        registry.addMapping(<span class="string">&quot;/**&quot;</span>)  <span class="comment">// 匹配所有路径</span></span><br><span class="line">                .allowedOrigins(<span class="string">&quot;http://localhost:3000&quot;</span>) <span class="comment">// 允许的源</span></span><br><span class="line">                .allowedMethods(<span class="string">&quot;GET&quot;</span>, <span class="string">&quot;POST&quot;</span>, <span class="string">&quot;PUT&quot;</span>, <span class="string">&quot;DELETE&quot;</span>) <span class="comment">// 允许的方法</span></span><br><span class="line">                .allowedHeaders(<span class="string">&quot;*&quot;</span>) <span class="comment">// 允许的请求头</span></span><br><span class="line">                .allowCredentials(<span class="literal">true</span>) <span class="comment">// 允许发送 Cookie</span></span><br><span class="line">                .maxAge(<span class="number">3600</span>); <span class="comment">// 预检请求缓存时间</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="⚠️-注意事项-1"><a href="#⚠️-注意事项-1" class="headerlink" title="⚠️ 注意事项"></a>⚠️ 注意事项</h3><ol>
+<li><strong><code>allowCredentials(true)</code> 时不能使用 &#96;allowedOrigins(“*”)</strong></li>
+<li><strong>要处理 <code>OPTIONS</code> 预检请求的响应</strong></li>
+</ol>
+<hr>
+<h2 id="5-CorsFilter-过滤器模式"><a href="#5-CorsFilter-过滤器模式" class="headerlink" title="5. CorsFilter 过滤器模式"></a>5. CorsFilter 过滤器模式</h2><h3 id="实现原理-2"><a href="#实现原理-2" class="headerlink" title="实现原理"></a>实现原理</h3><ul>
+<li><strong>通过自定义 Filter 在请求处理前添加 CORS 响应头。</strong></li>
+</ul>
+<h3 id="代码示例-1"><a href="#代码示例-1" class="headerlink" title="代码示例"></a>代码示例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.cors.CorsConfiguration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.cors.UrlBasedCorsConfigurationSource;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.filter.CorsFilter;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GlobalCorsConfig</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> CorsFilter <span class="title function_">corsFilter</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 1. 创建 CORS 配置对象</span></span><br><span class="line">        <span class="type">CorsConfiguration</span> <span class="variable">config</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CorsConfiguration</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 允许的域名（不要使用 *）</span></span><br><span class="line">        config.addAllowedOrigin(<span class="string">&quot;http://localhost:3000&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 允许的请求方法</span></span><br><span class="line">        config.addAllowedMethod(<span class="string">&quot;*&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 允许的请求头</span></span><br><span class="line">        config.addAllowedHeader(<span class="string">&quot;*&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 允许发送 Cookie</span></span><br><span class="line">        config.setAllowCredentials(<span class="literal">true</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 预检请求缓存时间（秒）</span></span><br><span class="line">        config.setMaxAge(<span class="number">3600L</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. 为所有路径添加配置</span></span><br><span class="line">        <span class="type">UrlBasedCorsConfigurationSource</span> <span class="variable">source</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">UrlBasedCorsConfigurationSource</span>();</span><br><span class="line">        source.registerCorsConfiguration(<span class="string">&quot;/**&quot;</span>, config);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3. 返回 CorsFilter 对象</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">CorsFilter</span>(source);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="⚠️-注意事项-2"><a href="#⚠️-注意事项-2" class="headerlink" title="⚠️ 注意事项"></a>⚠️ 注意事项</h3><ol>
+<li><strong>Filter 的顺序可能影响功能，建议设置为最高优先级</strong></li>
+<li><strong>避免同时使用多种 CORS 配置方式导致冲突</strong></li>
+</ol>
+<hr>
+<h2 id="6-网关模式"><a href="#6-网关模式" class="headerlink" title="6. 网关模式"></a>6. 网关模式</h2><h3 id="实现原理-3"><a href="#实现原理-3" class="headerlink" title="实现原理"></a>实现原理</h3><ul>
+<li>在 API 网关层（如 Spring Cloud Gateway）统一处理跨域。</li>
+</ul>
+<h3 id="Gateway-配置示例"><a href="#Gateway-配置示例" class="headerlink" title="Gateway 配置示例"></a>Gateway 配置示例</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">gateway:</span></span><br><span class="line">      <span class="attr">globalcors:</span></span><br><span class="line">        <span class="attr">cors-configurations:</span></span><br><span class="line">          <span class="string">&#x27;[/**]&#x27;</span><span class="string">:</span></span><br><span class="line">            <span class="attr">allowedOrigins:</span> <span class="string">&quot;http://localhost:3000&quot;</span></span><br><span class="line">            <span class="attr">allowedMethods:</span> <span class="string">&quot;*&quot;</span></span><br><span class="line">            <span class="attr">allowedHeaders:</span> <span class="string">&quot;*&quot;</span></span><br><span class="line">            <span class="attr">allowCredentials:</span> <span class="literal">true</span></span><br><span class="line">            <span class="attr">maxAge:</span> <span class="number">3600</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="⚠️-注意事项-3"><a href="#⚠️-注意事项-3" class="headerlink" title="⚠️ 注意事项"></a>⚠️ 注意事项</h3><ol>
+<li>网关需要处理所有服务的跨域问题</li>
+<li>确保网关配置覆盖所有路由规则</li>
+<li>生产环境应禁用 <code>allowedMethods: &quot;*&quot;</code></li>
+</ol>
+<hr>
+<h2 id="7-方案对比总结"><a href="#7-方案对比总结" class="headerlink" title="7. 方案对比总结"></a>7. 方案对比总结</h2><table>
+<thead>
+<tr>
+<th align="left">方案</th>
+<th align="left">优点</th>
+<th align="left">缺点</th>
+<th align="left">适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Nginx 配置</td>
+<td align="left">性能最佳，无需修改代码</td>
+<td align="left">需要运维配合</td>
+<td align="left">已有 Nginx 代理的项目</td>
+</tr>
+<tr>
+<td align="left">addCorsMapping</td>
+<td align="left">配置简单，纯 Spring 实现</td>
+<td align="left">无法处理非 Controller 请求</td>
+<td align="left">简单项目</td>
+</tr>
+<tr>
+<td align="left">CorsFilter</td>
+<td align="left">全局处理，优先级高</td>
+<td align="left">需注意 Filter 顺序</td>
+<td align="left">需要精细控制的场景</td>
+</tr>
+<tr>
+<td align="left">网关模式</td>
+<td align="left">统一管理微服务跨域</td>
+<td align="left">依赖网关组件</td>
+<td align="left">微服务架构</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="掌握这-4-种跨域处理方式，根据项目架构灵活选择，从此告别跨域烦恼！🎉"><a href="#掌握这-4-种跨域处理方式，根据项目架构灵活选择，从此告别跨域烦恼！🎉" class="headerlink" title="掌握这 4 种跨域处理方式，根据项目架构灵活选择，从此告别跨域烦恼！🎉"></a><strong>掌握这 4 种跨域处理方式，根据项目架构灵活选择，从此告别跨域烦恼！🎉</strong></h2></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">阿文</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/02/27/%F0%9F%8C%90%20Spring%20Boot%20%E8%B7%A8%E5%9F%9F%E5%A4%84%E7%90%86%E7%BB%88%E6%9E%81%E6%8C%87%E5%8D%97/">http://example.com/2025/02/27/%F0%9F%8C%90%20Spring%20Boot%20%E8%B7%A8%E5%9F%9F%E5%A4%84%E7%90%86%E7%BB%88%E6%9E%81%E6%8C%87%E5%8D%97/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">社畜阿文</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java/">Java</a><a class="post-meta__tags" href="/tags/SpringBoot/">SpringBoot</a></div><div class="post-share"><div class="social-share" data-image="/img/7.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/%E5%BE%AE%E4%BF%A1.jpg" target="_blank"><img class="post-qr-code-img" src="/img/%E5%BE%AE%E4%BF%A1.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/%E6%94%AF%E4%BB%98%E5%AE%9D.jpg" target="_blank"><img class="post-qr-code-img" src="/img/%E6%94%AF%E4%BB%98%E5%AE%9D.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/02/27/SpringBoot%E5%BC%82%E6%AD%A5%E7%BA%BF%E7%A8%8B%E9%97%B4%E6%95%B0%E6%8D%AE%E4%BC%A0%E9%80%92%E7%9A%84%205%20%E7%A7%8D%E4%BC%98%E9%9B%85%E5%AE%9E%E7%8E%B0/" title="🚀 Spring Boot 异步线程间数据传递的 5 种优雅实现"><img class="cover" src="/img/8.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">🚀 Spring Boot 异步线程间数据传递的 5 种优雅实现</div></div><div class="info-2"><div class="info-item-1">在 Spring Boot 中，异步编程（如使用 @Async）是提升应用性能的常用手段。然而，异步线程间的数据传递是一个常见难题。本文将介绍 5 种优雅的实现方式，帮助你解决这一问题！  目录 ThreadLocal + TaskDecorator TransmittableThreadLocal DelegatingSecurityContextAsyncTaskExecutor CompletableFuture 自定义上下文传递 Spring Cloud Sleuth 分布式追踪   1. ThreadLocal + TaskDecorator实现原理 通过 TaskDecorator 在任务执行前将主线程的 ThreadLocal 数据复制到子线程中。  代码示例12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152import org.springframework.context.annotation.Bean;import...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/02/27/SpringBoot%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3%E5%A4%A7%E5%85%A8/" title="📚 Spring Boot 常用注解大全"><img class="cover" src="/img/9.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-27</div><div class="info-item-2">📚 Spring Boot 常用注解大全</div></div><div class="info-2"><div class="info-item-1">本文整理了 100 个 Spring Boot 中常用的注解，并详细解释了它们的功能和用法。无论是新手还是进阶开发者，都可以通过本文快速掌握 Spring Boot 的核心注解！🚀 1. 核心注解   注解 功能描述    @SpringBootApplication 标记主启动类，包含 @Configuration、@EnableAutoConfiguration 和 @ComponentScan。   @Configuration 标记一个类为配置类，定义 Bean。   @Bean 在配置类中定义 Bean 实例。   @Component 标记一个类为 Spring 组件（通用注解）。   @Service 标记一个类为服务层组件。   @Repository 标记一个类为数据访问层组件（DAO）。   @Controller 标记一个类为控制器层组件。   @RestController 标记一个类为 REST 控制器，返回 JSON 数据。   @ComponentScan 指定 Spring...</div></div></div></a><a class="pagination-related" href="/2025/02/27/SpringBoot%E5%BC%82%E6%AD%A5%E7%BA%BF%E7%A8%8B%E9%97%B4%E6%95%B0%E6%8D%AE%E4%BC%A0%E9%80%92%E7%9A%84%205%20%E7%A7%8D%E4%BC%98%E9%9B%85%E5%AE%9E%E7%8E%B0/" title="🚀 Spring Boot 异步线程间数据传递的 5 种优雅实现"><img class="cover" src="/img/8.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-27</div><div class="info-item-2">🚀 Spring Boot 异步线程间数据传递的 5 种优雅实现</div></div><div class="info-2"><div class="info-item-1">在 Spring Boot 中，异步编程（如使用 @Async）是提升应用性能的常用手段。然而，异步线程间的数据传递是一个常见难题。本文将介绍 5 种优雅的实现方式，帮助你解决这一问题！  目录 ThreadLocal + TaskDecorator TransmittableThreadLocal DelegatingSecurityContextAsyncTaskExecutor CompletableFuture 自定义上下文传递 Spring Cloud Sleuth 分布式追踪   1. ThreadLocal + TaskDecorator实现原理 通过 TaskDecorator 在任务执行前将主线程的 ThreadLocal 数据复制到子线程中。  代码示例12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152import org.springframework.context.annotation.Bean;import...</div></div></div></a><a class="pagination-related" href="/2025/02/26/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E7%A1%80%E8%AE%B2%E8%A7%A3/" title="Java 多线程基础讲解"><img class="cover" src="/img/3.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-26</div><div class="info-item-2">Java 多线程基础讲解</div></div><div class="info-2"><div class="info-item-1">Java 多线程基础讲解 多线程是 Java 编程中的重要概念，它允许程序同时执行多个任务，从而提高程序的效率和性能。本文将介绍 Java 中多线程的基础知识，包括线程的创建、同步、通信等内容。   1. 什么是线程？ 线程是程序执行的最小单元。一个进程可以包含多个线程，每个线程可以独立执行不同的任务。多线程的优势在于可以充分利用 CPU 资源，提高程序的并发性。   2. 创建线程的两种方式 在 Java 中，创建线程有两种主要方式：  方式一：继承 Thread 类 通过继承 Thread 类并重写 run() 方法来创建线程。  12345678910111213class MyThread extends Thread &#123;  // 定义一个继承 Thread 的类    @Override    public void run() &#123;  // 重写 run 方法，定义线程执行的任务        System.out.println(&quot;线程运行中: &quot; + Thread.currentThread().getName()); ...</div></div></div></a><a class="pagination-related" href="/2025/02/26/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E8%BF%9B%E9%98%B6%E8%AE%B2%E8%A7%A3&%E9%94%81%E6%9C%BA%E5%88%B6/" title="Java 多线程进阶讲解与各种锁机制"><img class="cover" src="/img/2.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-26</div><div class="info-item-2">Java 多线程进阶讲解与各种锁机制</div></div><div class="info-2"><div class="info-item-1">Java 多线程进阶讲解与各种锁机制在 Java 多线程编程中，锁机制是保证线程安全的重要手段。本文将深入探讨 Java 中的各种锁机制，包括 synchronized、ReentrantLock、ReadWriteLock、StampedLock 等，并通过代码示例详细讲解其用法。  1. synchronized 关键字synchronized 是 Java 中最基本的锁机制，可以修饰方法或代码块，确保同一时间只有一个线程可以访问共享资源。 修饰方法1234567891011class Counter &#123;    private int count = 0;    public synchronized void increment() &#123;  // 使用 synchronized 修饰方法        count++;  // 对共享变量进行操作    &#125;    public int getCount() &#123;        return count;   ...</div></div></div></a><a class="pagination-related" href="/2025/02/26/Java%E5%AD%A6%E5%8E%86%E8%B7%AF%E5%BE%84/" title="Java 学习路径与注意事项"><img class="cover" src="/img/%E6%96%87%E7%AB%A0%E8%83%8C%E6%99%AF1.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-26</div><div class="info-item-2">Java 学习路径与注意事项</div></div><div class="info-2"><div class="info-item-1">Java 学习路径与注意事项 Java 是一门广泛应用于企业级开发、移动开发和大数据领域的编程语言。本文将从 学习路径、注意事项 和 参考文档 三个方面，帮助你系统性地掌握 Java。   一、Java 学习路径1. 入门阶段 目标：掌握 Java 基础语法和编程思想。  学习内容：  Java 开发环境搭建（JDK、IDE）。 基础语法：变量、数据类型、运算符、控制流程。 面向对象编程（OOP）：类、对象、继承、多态。 异常处理、集合框架、泛型。   代码示例： 12345public class HelloWorld &#123;    public static void main(String[] args) &#123;        System.out.println(&quot;Hello, World!&quot;);    &#125;&#125; 推荐资源：  书籍：《Java 核心技术 卷 I》（Cay S. Horstmann）。  在线教程：Java Tutorial by Oracle。     2. 进阶阶段 目标：深入理解 Java...</div></div></div></a><a class="pagination-related" href="/2025/02/27/Java%E6%A8%A1%E5%9D%97%E5%8C%96%E8%AF%A6%E8%A7%A3/" title="🧩 Java 模块化详解：从入门到实战"><img class="cover" src="/img/7.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-27</div><div class="info-item-2">🧩 Java 模块化详解：从入门到实战</div></div><div class="info-2"><div class="info-item-1">🧩 Java 模块化详解Java 模块化（Jigsaw 项目）是 Java 9 引入的重要特性，旨在解决 JAR 地狱 和 类路径冲突 问题。本文将深入讲解模块化的核心概念、使用方法及实战技巧，助你掌握模块化开发的精髓！ 🚀  一、模块化概述1. 什么是模块化？模块化是将代码划分为独立的、可重用的单元，每个模块包含：  模块描述文件（module-info.java） 包（包含类和接口） 资源文件  2. 模块化的优势 强封装性：模块可以明确声明导出哪些包，隐藏内部实现。 依赖管理：显式声明模块间的依赖关系，避免冲突。 性能优化：JVM 可以仅加载必要的模块，减少内存占用。  3. Jar Hell jar文件无法控制别人访问其内部的public的类 无法控制不同jar包中，相同的类名(包名+类名) Java运行时，无法判定classpath路径上的jar中有多少个不同版本的文件。Java加载第一个符合名字的类 Java运行时，无法预判classpath路径上是否缺失了一些关键类  4....</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/TouXing.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">阿文</div><div class="author-info-description">一个致力于分享知识，日常，沙雕的博主</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>视奸我</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎欢迎，热烈欢迎</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8C%90-Spring-Boot-%E8%B7%A8%E5%9F%9F%E5%A4%84%E7%90%86%E7%BB%88%E6%9E%81%E6%8C%87%E5%8D%97"><span class="toc-number">1.</span> <span class="toc-text">🌐 Spring Boot 跨域处理终极指南</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-number">1.1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E8%B7%A8%E5%9F%9F%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">1. 什么是跨域？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%90%86%E8%A7%A3-CORS"><span class="toc-number">1.3.</span> <span class="toc-text">2. 理解 CORS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CORS-%E5%85%B3%E9%94%AE%E5%93%8D%E5%BA%94%E5%A4%B4"><span class="toc-number">1.3.1.</span> <span class="toc-text">CORS 关键响应头</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Nginx-%E9%85%8D%E7%BD%AE"><span class="toc-number">1.4.</span> <span class="toc-text">3. Nginx 配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">1.4.1.</span> <span class="toc-text">实现原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.4.2.</span> <span class="toc-text">配置示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9A%A0%EF%B8%8F-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">1.4.3.</span> <span class="toc-text">⚠️ 注意事项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E9%85%8D%E7%BD%AE%E7%B1%BB%E5%AE%9E%E7%8E%B0-addCorsMapping"><span class="toc-number">1.5.</span> <span class="toc-text">4. 配置类实现 addCorsMapping</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86-1"><span class="toc-number">1.5.1.</span> <span class="toc-text">实现原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.5.2.</span> <span class="toc-text">代码示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9A%A0%EF%B8%8F-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-1"><span class="toc-number">1.5.3.</span> <span class="toc-text">⚠️ 注意事项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-CorsFilter-%E8%BF%87%E6%BB%A4%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.6.</span> <span class="toc-text">5. CorsFilter 过滤器模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86-2"><span class="toc-number">1.6.1.</span> <span class="toc-text">实现原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B-1"><span class="toc-number">1.6.2.</span> <span class="toc-text">代码示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9A%A0%EF%B8%8F-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-2"><span class="toc-number">1.6.3.</span> <span class="toc-text">⚠️ 注意事项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E7%BD%91%E5%85%B3%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.7.</span> <span class="toc-text">6. 网关模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86-3"><span class="toc-number">1.7.1.</span> <span class="toc-text">实现原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gateway-%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.7.2.</span> <span class="toc-text">Gateway 配置示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9A%A0%EF%B8%8F-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-3"><span class="toc-number">1.7.3.</span> <span class="toc-text">⚠️ 注意事项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E6%96%B9%E6%A1%88%E5%AF%B9%E6%AF%94%E6%80%BB%E7%BB%93"><span class="toc-number">1.8.</span> <span class="toc-text">7. 方案对比总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%8C%E6%8F%A1%E8%BF%99-4-%E7%A7%8D%E8%B7%A8%E5%9F%9F%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F%EF%BC%8C%E6%A0%B9%E6%8D%AE%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84%E7%81%B5%E6%B4%BB%E9%80%89%E6%8B%A9%EF%BC%8C%E4%BB%8E%E6%AD%A4%E5%91%8A%E5%88%AB%E8%B7%A8%E5%9F%9F%E7%83%A6%E6%81%BC%EF%BC%81%F0%9F%8E%89"><span class="toc-number">1.9.</span> <span class="toc-text">掌握这 4 种跨域处理方式，根据项目架构灵活选择，从此告别跨域烦恼！🎉</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/02/27/Java%E6%A8%A1%E5%9D%97%E5%8C%96%E8%AF%A6%E8%A7%A3/" title="🧩 Java 模块化详解：从入门到实战"><img src="/img/7.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="🧩 Java 模块化详解：从入门到实战"/></a><div class="content"><a class="title" href="/2025/02/27/Java%E6%A8%A1%E5%9D%97%E5%8C%96%E8%AF%A6%E8%A7%A3/" title="🧩 Java 模块化详解：从入门到实战">🧩 Java 模块化详解：从入门到实战</a><time datetime="2025-02-26T16:00:00.000Z" title="发表于 2025-02-27 00:00:00">2025-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/02/27/Java%E4%B8%ADIO%E6%B5%81%E7%BB%88%E6%9E%81%E6%8C%87%E5%8D%97/" title="Java中IO流终极指南"><img src="/img/11.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java中IO流终极指南"/></a><div class="content"><a class="title" href="/2025/02/27/Java%E4%B8%ADIO%E6%B5%81%E7%BB%88%E6%9E%81%E6%8C%87%E5%8D%97/" title="Java中IO流终极指南">Java中IO流终极指南</a><time datetime="2025-02-26T16:00:00.000Z" title="发表于 2025-02-27 00:00:00">2025-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/02/27/Java%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6%E5%AE%8C%E5%85%A8%E8%A7%A3%E6%9E%90/" title="Java反射机制完全解析"><img src="/img/10.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java反射机制完全解析"/></a><div class="content"><a class="title" href="/2025/02/27/Java%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6%E5%AE%8C%E5%85%A8%E8%A7%A3%E6%9E%90/" title="Java反射机制完全解析">Java反射机制完全解析</a><time datetime="2025-02-26T16:00:00.000Z" title="发表于 2025-02-27 00:00:00">2025-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/02/27/SpringBoot%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3%E5%A4%A7%E5%85%A8/" title="📚 Spring Boot 常用注解大全"><img src="/img/9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="📚 Spring Boot 常用注解大全"/></a><div class="content"><a class="title" href="/2025/02/27/SpringBoot%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3%E5%A4%A7%E5%85%A8/" title="📚 Spring Boot 常用注解大全">📚 Spring Boot 常用注解大全</a><time datetime="2025-02-26T16:00:00.000Z" title="发表于 2025-02-27 00:00:00">2025-02-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/02/27/SpringBoot%E5%BC%82%E6%AD%A5%E7%BA%BF%E7%A8%8B%E9%97%B4%E6%95%B0%E6%8D%AE%E4%BC%A0%E9%80%92%E7%9A%84%205%20%E7%A7%8D%E4%BC%98%E9%9B%85%E5%AE%9E%E7%8E%B0/" title="🚀 Spring Boot 异步线程间数据传递的 5 种优雅实现"><img src="/img/8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="🚀 Spring Boot 异步线程间数据传递的 5 种优雅实现"/></a><div class="content"><a class="title" href="/2025/02/27/SpringBoot%E5%BC%82%E6%AD%A5%E7%BA%BF%E7%A8%8B%E9%97%B4%E6%95%B0%E6%8D%AE%E4%BC%A0%E9%80%92%E7%9A%84%205%20%E7%A7%8D%E4%BC%98%E9%9B%85%E5%AE%9E%E7%8E%B0/" title="🚀 Spring Boot 异步线程间数据传递的 5 种优雅实现">🚀 Spring Boot 异步线程间数据传递的 5 种优雅实现</a><time datetime="2025-02-26T16:00:00.000Z" title="发表于 2025-02-27 00:00:00">2025-02-27</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/7.jpg);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By 阿文</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.3</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+
+  const disqusReset = conf => {
+    window.DISQUS && window.DISQUS.reset({
+      reload: true,
+      config: conf
+    })
+  }
+
+  const loadDisqus = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyDisqus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    window.disqus_identifier = isShuoshuo ? path : '/2025/02/27/%F0%9F%8C%90%20Spring%20Boot%20%E8%B7%A8%E5%9F%9F%E5%A4%84%E7%90%86%E7%BB%88%E6%9E%81%E6%8C%87%E5%8D%97/'
+    window.disqus_url = isShuoshuo ? location.origin + path : 'http://example.com/2025/02/27/%F0%9F%8C%90%20Spring%20Boot%20%E8%B7%A8%E5%9F%9F%E5%A4%84%E7%90%86%E7%BB%88%E6%9E%81%E6%8C%87%E5%8D%97/'
+
+    const disqus_config = function () {
+      this.page.url = disqus_url
+      this.page.identifier = disqus_identifier
+      this.page.title = '🌐 Spring Boot 跨域处理终极指南'
+    }
+
+    if (window.DISQUS) disqusReset(disqus_config)
+    else {
+      const script = document.createElement('script')
+      script.src = 'https://.disqus.com/embed.js'
+      script.setAttribute('data-timestamp', +new Date())
+      document.head.appendChild(script)
+    }
+
+    btf.addGlobalFn('themeChange', () => disqusReset(disqus_config), 'disqus')
+  }
+
+  const getCount = async() => {
+    try {
+      const eleGroup = document.querySelector('#post-meta .disqus-comment-count')
+      if (!eleGroup) return
+      const cleanedLinks = eleGroup.href.replace(/#post-comment$/, '')
+
+      const res = await fetch(`https://disqus.com/api/3.0/threads/set.json?forum=&api_key=&thread:link=${cleanedLinks}`,{
+        method: 'GET'
+      })
+      const result = await res.json()
+
+      const count = result.response.length ? result.response[0].posts : 0
+      eleGroup.textContent = count
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Disqus' === 'Disqus'
+      ? window.shuoshuoComment = { loadComment: loadDisqus }
+      : window.loadOtherComment = loadDisqus
+    return
+  }
+
+  if ('Disqus' === 'Disqus' || !true) {
+    if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+    else {
+      loadDisqus()
+      
+    }
+  } else {
+    window.loadOtherComment = loadDisqus
+  }
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
