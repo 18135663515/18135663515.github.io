@@ -1,0 +1,386 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>🚀 JDK 动态代理与 CGLIB 动态代理详解 | 社畜阿文</title><meta name="author" content="阿文"><meta name="copyright" content="阿文"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文深入讲解 JDK 动态代理 和 CGLIB 动态代理 的区别、实现原理、应用场景，并通过 示例代码 和 详细注释 帮助你彻底掌握这两种代理技术！✨ 目录 JDK 动态代理 vs CGLIB 动态代理 JDK 动态代理实现原理 JDK 动态代理示例 扩展 JDK 动态代理示例 CGLIB 动态代理实现原理 CGLIB 动态代理示例 总结   1. JDK 动态代理 vs CGLIB 动态代理核心">
+<meta property="og:type" content="article">
+<meta property="og:title" content="🚀 JDK 动态代理与 CGLIB 动态代理详解">
+<meta property="og:url" content="http://example.com/2025/02/28/%F0%9F%9A%80%20JDK%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B8%8E%20CGLIB%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="社畜阿文">
+<meta property="og:description" content="本文深入讲解 JDK 动态代理 和 CGLIB 动态代理 的区别、实现原理、应用场景，并通过 示例代码 和 详细注释 帮助你彻底掌握这两种代理技术！✨ 目录 JDK 动态代理 vs CGLIB 动态代理 JDK 动态代理实现原理 JDK 动态代理示例 扩展 JDK 动态代理示例 CGLIB 动态代理实现原理 CGLIB 动态代理示例 总结   1. JDK 动态代理 vs CGLIB 动态代理核心">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/39.png">
+<meta property="article:published_time" content="2025-02-27T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-02-28T12:14:18.012Z">
+<meta property="article:author" content="阿文">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="JDK">
+<meta property="article:tag" content="CGLIB">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/39.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "🚀 JDK 动态代理与 CGLIB 动态代理详解",
+  "url": "http://example.com/2025/02/28/%F0%9F%9A%80%20JDK%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B8%8E%20CGLIB%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/",
+  "image": "http://example.com/img/39.png",
+  "datePublished": "2025-02-27T16:00:00.000Z",
+  "dateModified": "2025-02-28T12:14:18.012Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "阿文",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/02/28/%F0%9F%9A%80%20JDK%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B8%8E%20CGLIB%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+  google_ad_client: '',
+  enable_page_level_ads: 'true'
+});</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-center"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '🚀 JDK 动态代理与 CGLIB 动态代理详解',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/TouXing.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">25</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 我们</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/39.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/%E5%8D%9A%E5%AE%A2.png" alt="Logo"><span class="site-name">社畜阿文</span></a><a class="nav-page-title" href="/"><span class="site-name">🚀 JDK 动态代理与 CGLIB 动态代理详解</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 我们</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">🚀 JDK 动态代理与 CGLIB 动态代理详解</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-02-27T16:00:00.000Z" title="发表于 2025-02-28 00:00:00">2025-02-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-02-28T12:14:18.012Z" title="更新于 2025-02-28 20:14:18">2025-02-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java/">Java</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java/JDK-CGLIB/">JDK/CGLIB</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h3 id="本文深入讲解-JDK-动态代理-和-CGLIB-动态代理-的区别、实现原理、应用场景，并通过-示例代码-和-详细注释-帮助你彻底掌握这两种代理技术！✨"><a href="#本文深入讲解-JDK-动态代理-和-CGLIB-动态代理-的区别、实现原理、应用场景，并通过-示例代码-和-详细注释-帮助你彻底掌握这两种代理技术！✨" class="headerlink" title="本文深入讲解 JDK 动态代理 和 CGLIB 动态代理 的区别、实现原理、应用场景，并通过 示例代码 和 详细注释 帮助你彻底掌握这两种代理技术！✨"></a>本文深入讲解 <strong>JDK 动态代理</strong> 和 <strong>CGLIB 动态代理</strong> 的区别、实现原理、应用场景，并通过 <strong>示例代码</strong> 和 <strong>详细注释</strong> 帮助你彻底掌握这两种代理技术！✨</h3><hr>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol>
+<li>JDK 动态代理 vs CGLIB 动态代理</li>
+<li>JDK 动态代理实现原理</li>
+<li>JDK 动态代理示例</li>
+<li>扩展 JDK 动态代理示例</li>
+<li>CGLIB 动态代理实现原理</li>
+<li>CGLIB 动态代理示例</li>
+<li>总结</li>
+</ol>
+<hr>
+<h2 id="1-JDK-动态代理-vs-CGLIB-动态代理"><a href="#1-JDK-动态代理-vs-CGLIB-动态代理" class="headerlink" title="1. JDK 动态代理 vs CGLIB 动态代理"></a>1. JDK 动态代理 vs CGLIB 动态代理</h2><h3 id="核心区别"><a href="#核心区别" class="headerlink" title="核心区别"></a>核心区别</h3><table>
+<thead>
+<tr>
+<th align="left">特性</th>
+<th align="left">JDK 动态代理</th>
+<th align="left">CGLIB 动态代理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>代理对象类型</strong></td>
+<td align="left">基于接口</td>
+<td align="left">基于类（无需接口）</td>
+</tr>
+<tr>
+<td align="left"><strong>性能</strong></td>
+<td align="left">较慢（反射调用）</td>
+<td align="left">较快（字节码生成）</td>
+</tr>
+<tr>
+<td align="left"><strong>依赖</strong></td>
+<td align="left">无需额外依赖</td>
+<td align="left">需要引入 CGLIB 库</td>
+</tr>
+<tr>
+<td align="left"><strong>限制</strong></td>
+<td align="left">只能代理实现了接口的类</td>
+<td align="left">不能代理 final 类或方法</td>
+</tr>
+<tr>
+<td align="left"><strong>实现原理</strong></td>
+<td align="left">反射 + 动态生成代理类</td>
+<td align="left">字节码生成 + 继承</td>
+</tr>
+</tbody></table>
+<h3 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h3><ul>
+<li><strong>JDK 动态代理</strong>：适用于代理接口或需要轻量级代理的场景。</li>
+<li><strong>CGLIB 动态代理</strong>：适用于代理类或需要高性能代理的场景。</li>
+</ul>
+<hr>
+<h2 id="2-JDK-动态代理实现原理"><a href="#2-JDK-动态代理实现原理" class="headerlink" title="2. JDK 动态代理实现原理"></a>2. JDK 动态代理实现原理</h2><h3 id="核心机制"><a href="#核心机制" class="headerlink" title="核心机制"></a>核心机制</h3><ol>
+<li><strong>反射调用</strong>：通过 <code>java.lang.reflect.Proxy</code> 动态生成代理类。</li>
+<li><strong>InvocationHandler</strong>：代理类的所有方法调用都会转发到 <code>InvocationHandler</code> 的 <code>invoke</code> 方法。</li>
+<li><strong>接口绑定</strong>：代理类必须实现目标接口。</li>
+</ol>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>无需额外依赖。</li>
+<li>轻量级，适合简单场景。</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>只能代理接口。</li>
+<li>性能较差（反射调用）。</li>
+</ul>
+<hr>
+<h2 id="3-JDK-动态代理示例"><a href="#3-JDK-动态代理示例" class="headerlink" title="3. JDK 动态代理示例"></a>3. JDK 动态代理示例</h2><h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationHandler;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Proxy;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. 定义接口</span></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">saveUser</span><span class="params">(String name)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 实现接口</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">UserServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">saveUser</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;保存用户: &quot;</span> + name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 实现 InvocationHandler</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">UserServiceProxy</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Object target;  <span class="comment">// 目标对象</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">UserServiceProxy</span><span class="params">(Object target)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.target = target;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;方法调用前: &quot;</span> + method.getName());</span><br><span class="line">        <span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> method.invoke(target, args);  <span class="comment">// 调用目标方法</span></span><br><span class="line">        System.out.println(<span class="string">&quot;方法调用后: &quot;</span> + method.getName());</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 4. 创建并使用代理对象</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">JdkProxyDemo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 目标对象</span></span><br><span class="line">        <span class="type">UserService</span> <span class="variable">target</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">UserServiceImpl</span>();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建代理对象</span></span><br><span class="line">        <span class="type">UserService</span> <span class="variable">proxy</span> <span class="operator">=</span> (UserService) Proxy.newProxyInstance(</span><br><span class="line">                target.getClass().getClassLoader(),  <span class="comment">// 类加载器</span></span><br><span class="line">                target.getClass().getInterfaces(),   <span class="comment">// 目标接口</span></span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">UserServiceProxy</span>(target)         <span class="comment">// InvocationHandler</span></span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 调用代理方法</span></span><br><span class="line">        proxy.saveUser(<span class="string">&quot;Alice&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="输出结果"><a href="#输出结果" class="headerlink" title="输出结果"></a>输出结果</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">方法调用前: saveUser</span><br><span class="line">保存用户: Alice</span><br><span class="line">方法调用后: saveUser</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码解析"><a href="#代码解析" class="headerlink" title="代码解析"></a>代码解析</h3><ol>
+<li><strong>目标接口</strong>：<code>UserService</code> 定义了业务方法。</li>
+<li><strong>目标实现类</strong>：<code>UserServiceImpl</code> 实现了接口。</li>
+<li><strong>InvocationHandler</strong>：<code>UserServiceProxy</code> 负责拦截方法调用。</li>
+<li><strong>代理对象</strong>：通过 <code>Proxy.newProxyInstance</code> 动态生成。</li>
+</ol>
+<hr>
+<h2 id="4-扩展-JDK-动态代理示例"><a href="#4-扩展-JDK-动态代理示例" class="headerlink" title="4. 扩展 JDK 动态代理示例"></a>4. 扩展 JDK 动态代理示例</h2><h3 id="扩展功能"><a href="#扩展功能" class="headerlink" title="扩展功能"></a>扩展功能</h3><ul>
+<li><strong>在代理方法前后添加日志记录和性能监控。</strong></li>
+</ul>
+<h3 id="示例代码-1"><a href="#示例代码-1" class="headerlink" title="示例代码"></a>示例代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationHandler;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Proxy;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. 定义接口</span></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">OrderService</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">createOrder</span><span class="params">(String orderId)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 实现接口</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">OrderServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">OrderService</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">createOrder</span><span class="params">(String orderId)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;创建订单: &quot;</span> + orderId);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 扩展 InvocationHandler</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">OrderServiceProxy</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Object target;  <span class="comment">// 目标对象</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">OrderServiceProxy</span><span class="params">(Object target)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.target = target;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="type">long</span> <span class="variable">startTime</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        System.out.println(<span class="string">&quot;开始执行: &quot;</span> + method.getName());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 调用目标方法</span></span><br><span class="line">        <span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> method.invoke(target, args);</span><br><span class="line"></span><br><span class="line">        <span class="type">long</span> <span class="variable">endTime</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        System.out.println(<span class="string">&quot;执行完成: &quot;</span> + method.getName() + <span class="string">&quot;, 耗时: &quot;</span> + (endTime - startTime) + <span class="string">&quot;ms&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 4. 创建并使用代理对象</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ExtendedJdkProxyDemo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 目标对象</span></span><br><span class="line">        <span class="type">OrderService</span> <span class="variable">target</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">OrderServiceImpl</span>();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建代理对象</span></span><br><span class="line">        <span class="type">OrderService</span> <span class="variable">proxy</span> <span class="operator">=</span> (OrderService) Proxy.newProxyInstance(</span><br><span class="line">                target.getClass().getClassLoader(),</span><br><span class="line">                target.getClass().getInterfaces(),</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">OrderServiceProxy</span>(target)</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 调用代理方法</span></span><br><span class="line">        proxy.createOrder(<span class="string">&quot;12345&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="输出结果-1"><a href="#输出结果-1" class="headerlink" title="输出结果"></a>输出结果</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">开始执行: createOrder</span><br><span class="line">创建订单: 12345</span><br><span class="line">执行完成: createOrder, 耗时: 2ms</span><br></pre></td></tr></table></figure>
+
+<h3 id="扩展点"><a href="#扩展点" class="headerlink" title="扩展点"></a>扩展点</h3><ul>
+<li><strong>日志记录</strong>：在方法调用前后打印日志。</li>
+<li><strong>性能监控</strong>：记录方法执行时间。</li>
+</ul>
+<hr>
+<h2 id="5-CGLIB-动态代理实现原理"><a href="#5-CGLIB-动态代理实现原理" class="headerlink" title="5. CGLIB 动态代理实现原理"></a>5. CGLIB 动态代理实现原理</h2><h3 id="核心机制-1"><a href="#核心机制-1" class="headerlink" title="核心机制"></a>核心机制</h3><ol>
+<li><strong>字节码生成</strong>：通过 ASM 库动态生成目标类的子类。</li>
+<li><strong>方法拦截</strong>：通过 <code>MethodInterceptor</code> 拦截方法调用。</li>
+<li><strong>继承机制</strong>：代理类继承目标类。</li>
+</ol>
+<h3 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>可以代理类（无需接口）。</li>
+<li>性能较好（直接调用字节码）。</li>
+</ul>
+<h3 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>不能代理 final 类或方法。</li>
+<li>需要引入 CGLIB 依赖。</li>
+</ul>
+<hr>
+<h2 id="6-CGLIB-动态代理示例"><a href="#6-CGLIB-动态代理示例" class="headerlink" title="6. CGLIB 动态代理示例"></a>6. CGLIB 动态代理示例</h2><h3 id="示例代码-2"><a href="#示例代码-2" class="headerlink" title="示例代码"></a>示例代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> net.sf.cglib.proxy.Enhancer;</span><br><span class="line"><span class="keyword">import</span> net.sf.cglib.proxy.MethodInterceptor;</span><br><span class="line"><span class="keyword">import</span> net.sf.cglib.proxy.MethodProxy;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. 目标类（无需接口）</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ProductService</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addProduct</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;添加产品: &quot;</span> + name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 实现 MethodInterceptor</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ProductServiceInterceptor</span> <span class="keyword">implements</span> <span class="title class_">MethodInterceptor</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">intercept</span><span class="params">(Object obj, Method method, Object[] args, MethodProxy proxy)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;方法调用前: &quot;</span> + method.getName());</span><br><span class="line">        <span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> proxy.invokeSuper(obj, args);  <span class="comment">// 调用父类方法</span></span><br><span class="line">        System.out.println(<span class="string">&quot;方法调用后: &quot;</span> + method.getName());</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 创建并使用代理对象</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CglibProxyDemo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 创建 Enhancer 对象</span></span><br><span class="line">        <span class="type">Enhancer</span> <span class="variable">enhancer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Enhancer</span>();</span><br><span class="line">        enhancer.setSuperclass(ProductService.class);  <span class="comment">// 设置父类</span></span><br><span class="line">        enhancer.setCallback(<span class="keyword">new</span> <span class="title class_">ProductServiceInterceptor</span>());  <span class="comment">// 设置回调</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建代理对象</span></span><br><span class="line">        <span class="type">ProductService</span> <span class="variable">proxy</span> <span class="operator">=</span> (ProductService) enhancer.create();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 调用代理方法</span></span><br><span class="line">        proxy.addProduct(<span class="string">&quot;iPhone 15&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="输出结果-2"><a href="#输出结果-2" class="headerlink" title="输出结果"></a>输出结果</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">方法调用前: addProduct</span><br><span class="line">添加产品: iPhone 15</span><br><span class="line">方法调用后: addProduct</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码解析-1"><a href="#代码解析-1" class="headerlink" title="代码解析"></a>代码解析</h3><ol>
+<li><strong>目标类</strong>：<code>ProductService</code> 定义了业务方法。</li>
+<li><strong>MethodInterceptor</strong>：<code>ProductServiceInterceptor</code> 负责拦截方法调用。</li>
+<li><strong>代理对象</strong>：通过 <code>Enhancer</code> 动态生成。</li>
+</ol>
+<hr>
+<h2 id="7-总结"><a href="#7-总结" class="headerlink" title="7. 总结"></a>7. 总结</h2><h3 id="核心对比"><a href="#核心对比" class="headerlink" title="核心对比"></a>核心对比</h3><table>
+<thead>
+<tr>
+<th align="left">特性</th>
+<th align="left">JDK 动态代理</th>
+<th align="left">CGLIB 动态代理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>代理对象类型</strong></td>
+<td align="left">基于接口</td>
+<td align="left">基于类（无需接口）</td>
+</tr>
+<tr>
+<td align="left"><strong>性能</strong></td>
+<td align="left">较慢（反射调用）</td>
+<td align="left">较快（字节码生成）</td>
+</tr>
+<tr>
+<td align="left"><strong>依赖</strong></td>
+<td align="left">无需额外依赖</td>
+<td align="left">需要引入 CGLIB 库</td>
+</tr>
+<tr>
+<td align="left"><strong>限制</strong></td>
+<td align="left">只能代理实现了接口的类</td>
+<td align="left">不能代理 final 类或方法</td>
+</tr>
+</tbody></table>
+<h3 id="选择建议"><a href="#选择建议" class="headerlink" title="选择建议"></a>选择建议</h3><ul>
+<li>如果目标对象实现了接口，优先使用 <strong>JDK 动态代理</strong>。</li>
+<li>如果目标对象没有实现接口，或者需要更高性能，使用 <strong>CGLIB 动态代理</strong>。</li>
+</ul>
+<hr>
+<h3 id="通过本文的学习，你已经掌握了-JDK-动态代理和-CGLIB-动态代理的核心原理和实现方法。快去实践吧！🚀"><a href="#通过本文的学习，你已经掌握了-JDK-动态代理和-CGLIB-动态代理的核心原理和实现方法。快去实践吧！🚀" class="headerlink" title="通过本文的学习，你已经掌握了 JDK 动态代理和 CGLIB 动态代理的核心原理和实现方法。快去实践吧！🚀"></a>通过本文的学习，你已经掌握了 JDK 动态代理和 CGLIB 动态代理的核心原理和实现方法。快去实践吧！🚀</h3></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">阿文</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/02/28/%F0%9F%9A%80%20JDK%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B8%8E%20CGLIB%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/">http://example.com/2025/02/28/%F0%9F%9A%80%20JDK%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B8%8E%20CGLIB%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">社畜阿文</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java/">Java</a><a class="post-meta__tags" href="/tags/JDK/">JDK</a><a class="post-meta__tags" href="/tags/CGLIB/">CGLIB</a></div><div class="post-share"><div class="social-share" data-image="/img/39.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/%E5%BE%AE%E4%BF%A1.jpg" target="_blank"><img class="post-qr-code-img" src="/img/%E5%BE%AE%E4%BF%A1.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/%E6%94%AF%E4%BB%98%E5%AE%9D.jpg" target="_blank"><img class="post-qr-code-img" src="/img/%E6%94%AF%E4%BB%98%E5%AE%9D.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/02/28/%F0%9F%9A%80%20MySQL%20%E7%9A%84%2014%20%E4%B8%AA%E5%AE%9D%E8%97%8F%E5%8A%9F%E8%83%BD%E8%AF%A6%E8%A7%A3/" title="🚀 MySQL 的 14 个宝藏功能深度解析"><img class="cover" src="/img/40.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">🚀 MySQL 的 14 个宝藏功能深度解析</div></div><div class="info-2"><div class="info-item-1">MySQL 的 14 个宝藏功能深度解析 本文将以 新手友好 的方式，详细讲解 MySQL 中 14 个核心功能的使用方法，包括 代码注释、实际应用场景** 和 避坑指南。每个功能均提供 多场景代码示例，助你彻底掌握 MySQL 的高级用法！✨**   目录 GROUP_CONCAT：字符串聚合 CHAR_LENGTH：字符级长度计算 LOCATE：精准定位子串 REPLACE：字符串手术刀 NOW：时间管理大师 INSERT INTO … SELECT：数据搬运工 INSERT IGNORE：优雅防冲突 SELECT FOR UPDATE：并发安全锁 ON DUPLICATE KEY UPDATE：智能写入 SHOW CREATE TABLE：结构克隆术 CREATE TABLE … SELECT：快速建表 EXPLAIN：SQL 透视镜 SHOW PROCESSLIST：连接监视器 mysqldump：数据保险箱   1. GROUP_CONCAT：字符串聚合🛠️ 功能说明 将分组中的多条记录的字段值合并成一个字符串，默认用逗号分隔。  🎯...</div></div></div></a><a class="pagination-related" href="/2025/02/28/%F0%9F%9A%80%20DeepSeek%20%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E7%A8%8B/" title="🚀 DeepSeek 本地部署保姆级教程"><img class="cover" src="/img/deepseek.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">🚀 DeepSeek 本地部署保姆级教程</div></div><div class="info-2"><div class="info-item-1">🚀 DeepSeek 本地部署保姆级教程 本文手把手教你如何实现 DeepSeek 大模型的本地部署，涵盖 软件准备、操作步骤、下载链接 及 避坑指南，助你轻松玩转本地 AI！✨   目录 部署前准备 基础环境配置 一键安装包部署（推荐新手） 手动部署（进阶用户） 可视化界面配置 注意事项与常见问题 总结   1. 部署前准备📋 硬件与软件要求   类别 最低配置 推荐配置    CPU 4 核以上 多核高性能 CPU（如 Intel i7&#x2F;i9）   GPU 支持 CUDA 的 NVIDIA 显卡 NVIDIA A100&#x2F;H100 或 RTX 4090   内存 16GB 32GB 及以上   存储 50GB 空闲空间 NVMe SSD 或高速硬盘   系统 Windows 10&#x2F;11 或 Ubuntu 20.04 Ubuntu 22.04 LTS   其他 Python 3.8+ Docker 环境（可选）    💡 提示：    普通笔记本建议部署 1.5B~7B 参数的小模型，大模型需高端 GPU...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/02/26/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E7%A1%80%E8%AE%B2%E8%A7%A3/" title="Java 多线程基础讲解"><img class="cover" src="/img/3.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-26</div><div class="info-item-2">Java 多线程基础讲解</div></div><div class="info-2"><div class="info-item-1">Java 多线程基础讲解 多线程是 Java 编程中的重要概念，它允许程序同时执行多个任务，从而提高程序的效率和性能。本文将介绍 Java 中多线程的基础知识，包括线程的创建、同步、通信等内容。   1. 什么是线程？ 线程是程序执行的最小单元。一个进程可以包含多个线程，每个线程可以独立执行不同的任务。多线程的优势在于可以充分利用 CPU 资源，提高程序的并发性。   2. 创建线程的两种方式 在 Java 中，创建线程有两种主要方式：  方式一：继承 Thread 类 通过继承 Thread 类并重写 run() 方法来创建线程。  12345678910111213class MyThread extends Thread &#123;  // 定义一个继承 Thread 的类    @Override    public void run() &#123;  // 重写 run 方法，定义线程执行的任务        System.out.println(&quot;线程运行中: &quot; + Thread.currentThread().getName()); ...</div></div></div></a><a class="pagination-related" href="/2025/02/26/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E8%BF%9B%E9%98%B6%E8%AE%B2%E8%A7%A3&%E9%94%81%E6%9C%BA%E5%88%B6/" title="Java 多线程进阶讲解与各种锁机制"><img class="cover" src="/img/2.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-26</div><div class="info-item-2">Java 多线程进阶讲解与各种锁机制</div></div><div class="info-2"><div class="info-item-1">Java 多线程进阶讲解与各种锁机制在 Java 多线程编程中，锁机制是保证线程安全的重要手段。本文将深入探讨 Java 中的各种锁机制，包括 synchronized、ReentrantLock、ReadWriteLock、StampedLock 等，并通过代码示例详细讲解其用法。  1. synchronized 关键字synchronized 是 Java 中最基本的锁机制，可以修饰方法或代码块，确保同一时间只有一个线程可以访问共享资源。 修饰方法1234567891011class Counter &#123;    private int count = 0;    public synchronized void increment() &#123;  // 使用 synchronized 修饰方法        count++;  // 对共享变量进行操作    &#125;    public int getCount() &#123;        return count;   ...</div></div></div></a><a class="pagination-related" href="/2025/02/26/Java%E5%AD%A6%E5%8E%86%E8%B7%AF%E5%BE%84/" title="Java 学习路径与注意事项"><img class="cover" src="/img/%E6%96%87%E7%AB%A0%E8%83%8C%E6%99%AF1.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-26</div><div class="info-item-2">Java 学习路径与注意事项</div></div><div class="info-2"><div class="info-item-1">Java 学习路径与注意事项 Java 是一门广泛应用于企业级开发、移动开发和大数据领域的编程语言。本文将从 学习路径、注意事项 和 参考文档 三个方面，帮助你系统性地掌握 Java。   一、Java 学习路径1. 入门阶段 目标：掌握 Java 基础语法和编程思想。  学习内容：  Java 开发环境搭建（JDK、IDE）。 基础语法：变量、数据类型、运算符、控制流程。 面向对象编程（OOP）：类、对象、继承、多态。 异常处理、集合框架、泛型。   代码示例： 12345public class HelloWorld &#123;    public static void main(String[] args) &#123;        System.out.println(&quot;Hello, World!&quot;);    &#125;&#125; 推荐资源：  书籍：《Java 核心技术 卷 I》（Cay S. Horstmann）。  在线教程：Java Tutorial by Oracle。     2. 进阶阶段 目标：深入理解 Java...</div></div></div></a><a class="pagination-related" href="/2025/02/27/Java%E6%A8%A1%E5%9D%97%E5%8C%96%E8%AF%A6%E8%A7%A3/" title="🧩 Java 模块化详解：从入门到实战"><img class="cover" src="/img/7.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-27</div><div class="info-item-2">🧩 Java 模块化详解：从入门到实战</div></div><div class="info-2"><div class="info-item-1">🧩 Java 模块化详解Java 模块化（Jigsaw 项目）是 Java 9 引入的重要特性，旨在解决 JAR 地狱 和 类路径冲突 问题。本文将深入讲解模块化的核心概念、使用方法及实战技巧，助你掌握模块化开发的精髓！ 🚀  一、模块化概述1. 什么是模块化？模块化是将代码划分为独立的、可重用的单元，每个模块包含：  模块描述文件（module-info.java） 包（包含类和接口） 资源文件  2. 模块化的优势 强封装性：模块可以明确声明导出哪些包，隐藏内部实现。 依赖管理：显式声明模块间的依赖关系，避免冲突。 性能优化：JVM 可以仅加载必要的模块，减少内存占用。  3. Jar Hell jar文件无法控制别人访问其内部的public的类 无法控制不同jar包中，相同的类名(包名+类名) Java运行时，无法判定classpath路径上的jar中有多少个不同版本的文件。Java加载第一个符合名字的类 Java运行时，无法预判classpath路径上是否缺失了一些关键类  4....</div></div></div></a><a class="pagination-related" href="/2025/02/27/Java%E4%B8%ADIO%E6%B5%81%E7%BB%88%E6%9E%81%E6%8C%87%E5%8D%97/" title="Java中IO流终极指南"><img class="cover" src="/img/11.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-27</div><div class="info-item-2">Java中IO流终极指南</div></div><div class="info-2"><div class="info-item-1">🌟 五大核心流详解1. 基础字节流（FileInputStream&#x2F;FileOutputStream）应用场景 图片、视频、音频等二进制文件的读写 文件加密&#x2F;解密 任意格式文件的复制  代码示例12345678910111213141516// 文件加密复制（字节流 + 简单异或加密）try (FileInputStream fis = new FileInputStream(&quot;source.jpg&quot;);     FileOutputStream fos = new FileOutputStream(&quot;encrypted.jpg&quot;)) &#123;        byte[] buffer = new byte[4096];  // 4KB缓冲区    int bytesRead;    while ((bytesRead = fis.read(buffer)) != -1) &#123;        // 简单加密：每个字节与0xFF异或        for (int i = 0; i &lt;...</div></div></div></a><a class="pagination-related" href="/2025/02/27/Java%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6%E5%AE%8C%E5%85%A8%E8%A7%A3%E6%9E%90/" title="Java反射机制完全解析"><img class="cover" src="/img/10.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-27</div><div class="info-item-2">Java反射机制完全解析</div></div><div class="info-2"><div class="info-item-1">1. 反射是什么？反射（Reflection）是 Java 提供的一种机制，允许程序在运行时动态地获取类的信息并操作类或对象。通过反射，我们可以：  获取类的构造方法、方法、字段等信息。 动态创建对象、调用方法、访问字段。 绕过访问权限检查（如访问私有成员）。  反射的核心思想：在运行时分析类的能力，而不是在编译时。  2. 反射的核心类Java 反射的核心类位于 java.lang.reflect 包中，主要包括：  Class：表示类的元数据。 Constructor：表示类的构造方法。 Method：表示类的方法。 Field：表示类的字段。 Modifier：表示类、方法、字段的修饰符（如 public、private）。   3. 反射的使用方法3.1 获取 Class 对象Class 对象是反射的入口，获取 Class 对象的方式有三种：  通过类名获取：Class.forName(&quot;全限定类名&quot;) 通过对象获取：对象.getClass() 通过类字面常量获取：类名.class  1234// 示例：获取 Class...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/TouXing.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">阿文</div><div class="author-info-description">一个致力于分享知识，日常，沙雕的博主</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">25</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>视奸我</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎欢迎，热烈欢迎</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AC%E6%96%87%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3-JDK-%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86-%E5%92%8C-CGLIB-%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86-%E7%9A%84%E5%8C%BA%E5%88%AB%E3%80%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%E3%80%81%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%8C%E5%B9%B6%E9%80%9A%E8%BF%87-%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81-%E5%92%8C-%E8%AF%A6%E7%BB%86%E6%B3%A8%E9%87%8A-%E5%B8%AE%E5%8A%A9%E4%BD%A0%E5%BD%BB%E5%BA%95%E6%8E%8C%E6%8F%A1%E8%BF%99%E4%B8%A4%E7%A7%8D%E4%BB%A3%E7%90%86%E6%8A%80%E6%9C%AF%EF%BC%81%E2%9C%A8"><span class="toc-number">1.</span> <span class="toc-text">本文深入讲解 JDK 动态代理 和 CGLIB 动态代理 的区别、实现原理、应用场景，并通过 示例代码 和 详细注释 帮助你彻底掌握这两种代理技术！✨</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-number"></span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-JDK-%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86-vs-CGLIB-%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86"><span class="toc-number"></span> <span class="toc-text">1. JDK 动态代理 vs CGLIB 动态代理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%8C%BA%E5%88%AB"><span class="toc-number">1.</span> <span class="toc-text">核心区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">2.</span> <span class="toc-text">适用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-JDK-%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number"></span> <span class="toc-text">2. JDK 动态代理实现原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6"><span class="toc-number">1.</span> <span class="toc-text">核心机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-number">2.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">3.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-JDK-%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E7%A4%BA%E4%BE%8B"><span class="toc-number"></span> <span class="toc-text">3. JDK 动态代理示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="toc-number">1.</span> <span class="toc-text">示例代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%87%BA%E7%BB%93%E6%9E%9C"><span class="toc-number">2.</span> <span class="toc-text">输出结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90"><span class="toc-number">3.</span> <span class="toc-text">代码解析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%89%A9%E5%B1%95-JDK-%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E7%A4%BA%E4%BE%8B"><span class="toc-number"></span> <span class="toc-text">4. 扩展 JDK 动态代理示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A9%E5%B1%95%E5%8A%9F%E8%83%BD"><span class="toc-number">1.</span> <span class="toc-text">扩展功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81-1"><span class="toc-number">2.</span> <span class="toc-text">示例代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%87%BA%E7%BB%93%E6%9E%9C-1"><span class="toc-number">3.</span> <span class="toc-text">输出结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A9%E5%B1%95%E7%82%B9"><span class="toc-number">4.</span> <span class="toc-text">扩展点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-CGLIB-%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number"></span> <span class="toc-text">5. CGLIB 动态代理实现原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6-1"><span class="toc-number">1.</span> <span class="toc-text">核心机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-1"><span class="toc-number">2.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-1"><span class="toc-number">3.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-CGLIB-%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E7%A4%BA%E4%BE%8B"><span class="toc-number"></span> <span class="toc-text">6. CGLIB 动态代理示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81-2"><span class="toc-number">1.</span> <span class="toc-text">示例代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%87%BA%E7%BB%93%E6%9E%9C-2"><span class="toc-number">2.</span> <span class="toc-text">输出结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90-1"><span class="toc-number">3.</span> <span class="toc-text">代码解析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E6%80%BB%E7%BB%93"><span class="toc-number"></span> <span class="toc-text">7. 总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%AF%B9%E6%AF%94"><span class="toc-number">1.</span> <span class="toc-text">核心对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E5%BB%BA%E8%AE%AE"><span class="toc-number">2.</span> <span class="toc-text">选择建议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E6%9C%AC%E6%96%87%E7%9A%84%E5%AD%A6%E4%B9%A0%EF%BC%8C%E4%BD%A0%E5%B7%B2%E7%BB%8F%E6%8E%8C%E6%8F%A1%E4%BA%86-JDK-%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E5%92%8C-CGLIB-%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E5%92%8C%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95%E3%80%82%E5%BF%AB%E5%8E%BB%E5%AE%9E%E8%B7%B5%E5%90%A7%EF%BC%81%F0%9F%9A%80"><span class="toc-number">3.</span> <span class="toc-text">通过本文的学习，你已经掌握了 JDK 动态代理和 CGLIB 动态代理的核心原理和实现方法。快去实践吧！🚀</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/02/28/%F0%9F%8C%9F%20MyBatis%20%E4%B8%AD%E7%9A%84%2010%20%E4%B8%AA%E5%AE%9D%E8%97%8F%E6%8A%80%E5%B7%A7/" title="🌟 MyBatis 中的 10 个宝藏技巧"><img src="/img/6.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="🌟 MyBatis 中的 10 个宝藏技巧"/></a><div class="content"><a class="title" href="/2025/02/28/%F0%9F%8C%9F%20MyBatis%20%E4%B8%AD%E7%9A%84%2010%20%E4%B8%AA%E5%AE%9D%E8%97%8F%E6%8A%80%E5%B7%A7/" title="🌟 MyBatis 中的 10 个宝藏技巧">🌟 MyBatis 中的 10 个宝藏技巧</a><time datetime="2025-02-27T16:00:00.000Z" title="发表于 2025-02-28 00:00:00">2025-02-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/02/28/%F0%9F%9A%80%20MySQL%20%E7%9A%84%2014%20%E4%B8%AA%E5%AE%9D%E8%97%8F%E5%8A%9F%E8%83%BD%E8%AF%A6%E8%A7%A3/" title="🚀 MySQL 的 14 个宝藏功能深度解析"><img src="/img/40.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="🚀 MySQL 的 14 个宝藏功能深度解析"/></a><div class="content"><a class="title" href="/2025/02/28/%F0%9F%9A%80%20MySQL%20%E7%9A%84%2014%20%E4%B8%AA%E5%AE%9D%E8%97%8F%E5%8A%9F%E8%83%BD%E8%AF%A6%E8%A7%A3/" title="🚀 MySQL 的 14 个宝藏功能深度解析">🚀 MySQL 的 14 个宝藏功能深度解析</a><time datetime="2025-02-27T16:00:00.000Z" title="发表于 2025-02-28 00:00:00">2025-02-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/02/28/%F0%9F%9A%80%20JDK%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B8%8E%20CGLIB%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/" title="🚀 JDK 动态代理与 CGLIB 动态代理详解"><img src="/img/39.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="🚀 JDK 动态代理与 CGLIB 动态代理详解"/></a><div class="content"><a class="title" href="/2025/02/28/%F0%9F%9A%80%20JDK%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B8%8E%20CGLIB%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/" title="🚀 JDK 动态代理与 CGLIB 动态代理详解">🚀 JDK 动态代理与 CGLIB 动态代理详解</a><time datetime="2025-02-27T16:00:00.000Z" title="发表于 2025-02-28 00:00:00">2025-02-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/02/28/%F0%9F%9A%80%20DeepSeek%20%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E7%A8%8B/" title="🚀 DeepSeek 本地部署保姆级教程"><img src="/img/deepseek.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="🚀 DeepSeek 本地部署保姆级教程"/></a><div class="content"><a class="title" href="/2025/02/28/%F0%9F%9A%80%20DeepSeek%20%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E7%A8%8B/" title="🚀 DeepSeek 本地部署保姆级教程">🚀 DeepSeek 本地部署保姆级教程</a><time datetime="2025-02-27T16:00:00.000Z" title="发表于 2025-02-28 00:00:00">2025-02-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/02/28/DeepSeek-R1%20%E6%8E%A5%E5%85%A5%20WPS%20%E5%AE%8C%E6%95%B4%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/" title="🚀 DeepSeek-R1 接入 WPS 完整开发指南"><img src="/img/37.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="🚀 DeepSeek-R1 接入 WPS 完整开发指南"/></a><div class="content"><a class="title" href="/2025/02/28/DeepSeek-R1%20%E6%8E%A5%E5%85%A5%20WPS%20%E5%AE%8C%E6%95%B4%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/" title="🚀 DeepSeek-R1 接入 WPS 完整开发指南">🚀 DeepSeek-R1 接入 WPS 完整开发指南</a><time datetime="2025-02-27T16:00:00.000Z" title="发表于 2025-02-28 00:00:00">2025-02-28</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/39.png);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By 阿文</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.3</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+
+  const disqusReset = conf => {
+    window.DISQUS && window.DISQUS.reset({
+      reload: true,
+      config: conf
+    })
+  }
+
+  const loadDisqus = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyDisqus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    window.disqus_identifier = isShuoshuo ? path : '/2025/02/28/%F0%9F%9A%80%20JDK%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B8%8E%20CGLIB%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/'
+    window.disqus_url = isShuoshuo ? location.origin + path : 'http://example.com/2025/02/28/%F0%9F%9A%80%20JDK%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B8%8E%20CGLIB%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/'
+
+    const disqus_config = function () {
+      this.page.url = disqus_url
+      this.page.identifier = disqus_identifier
+      this.page.title = '🚀 JDK 动态代理与 CGLIB 动态代理详解'
+    }
+
+    if (window.DISQUS) disqusReset(disqus_config)
+    else {
+      const script = document.createElement('script')
+      script.src = 'https://.disqus.com/embed.js'
+      script.setAttribute('data-timestamp', +new Date())
+      document.head.appendChild(script)
+    }
+
+    btf.addGlobalFn('themeChange', () => disqusReset(disqus_config), 'disqus')
+  }
+
+  const getCount = async() => {
+    try {
+      const eleGroup = document.querySelector('#post-meta .disqus-comment-count')
+      if (!eleGroup) return
+      const cleanedLinks = eleGroup.href.replace(/#post-comment$/, '')
+
+      const res = await fetch(`https://disqus.com/api/3.0/threads/set.json?forum=&api_key=&thread:link=${cleanedLinks}`,{
+        method: 'GET'
+      })
+      const result = await res.json()
+
+      const count = result.response.length ? result.response[0].posts : 0
+      eleGroup.textContent = count
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Disqus' === 'Disqus'
+      ? window.shuoshuoComment = { loadComment: loadDisqus }
+      : window.loadOtherComment = loadDisqus
+    return
+  }
+
+  if ('Disqus' === 'Disqus' || !true) {
+    if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+    else {
+      loadDisqus()
+      
+    }
+  } else {
+    window.loadOtherComment = loadDisqus
+  }
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

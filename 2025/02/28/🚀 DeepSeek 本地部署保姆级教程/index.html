@@ -1,0 +1,430 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>🚀 DeepSeek 本地部署保姆级教程 | 社畜阿文</title><meta name="author" content="阿文"><meta name="copyright" content="阿文"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="🚀 DeepSeek 本地部署保姆级教程 本文手把手教你如何实现 DeepSeek 大模型的本地部署，涵盖 软件准备、操作步骤、下载链接 及 避坑指南，助你轻松玩转本地 AI！✨   目录 部署前准备 基础环境配置 一键安装包部署（推荐新手） 手动部署（进阶用户） 可视化界面配置 注意事项与常见问题 总结   1. 部署前准备📋 硬件与软件要求   类别 最低配置 推荐配置    CPU 4">
+<meta property="og:type" content="article">
+<meta property="og:title" content="🚀 DeepSeek 本地部署保姆级教程">
+<meta property="og:url" content="http://example.com/2025/02/28/%F0%9F%9A%80%20DeepSeek%20%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E7%A8%8B/index.html">
+<meta property="og:site_name" content="社畜阿文">
+<meta property="og:description" content="🚀 DeepSeek 本地部署保姆级教程 本文手把手教你如何实现 DeepSeek 大模型的本地部署，涵盖 软件准备、操作步骤、下载链接 及 避坑指南，助你轻松玩转本地 AI！✨   目录 部署前准备 基础环境配置 一键安装包部署（推荐新手） 手动部署（进阶用户） 可视化界面配置 注意事项与常见问题 总结   1. 部署前准备📋 硬件与软件要求   类别 最低配置 推荐配置    CPU 4">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/deepseek.png">
+<meta property="article:published_time" content="2025-02-27T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-02-28T12:21:53.052Z">
+<meta property="article:author" content="阿文">
+<meta property="article:tag" content="AI">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/deepseek.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "🚀 DeepSeek 本地部署保姆级教程",
+  "url": "http://example.com/2025/02/28/%F0%9F%9A%80%20DeepSeek%20%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E7%A8%8B/",
+  "image": "http://example.com/img/deepseek.png",
+  "datePublished": "2025-02-27T16:00:00.000Z",
+  "dateModified": "2025-02-28T12:21:53.052Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "阿文",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/02/28/%F0%9F%9A%80%20DeepSeek%20%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E7%A8%8B/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+  google_ad_client: '',
+  enable_page_level_ads: 'true'
+});</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-center"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '🚀 DeepSeek 本地部署保姆级教程',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/TouXing.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">25</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 我们</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/deepseek.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/%E5%8D%9A%E5%AE%A2.png" alt="Logo"><span class="site-name">社畜阿文</span></a><a class="nav-page-title" href="/"><span class="site-name">🚀 DeepSeek 本地部署保姆级教程</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 我们</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">🚀 DeepSeek 本地部署保姆级教程</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-02-27T16:00:00.000Z" title="发表于 2025-02-28 00:00:00">2025-02-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-02-28T12:21:53.052Z" title="更新于 2025-02-28 20:21:53">2025-02-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI/">AI</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">971</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="🚀-DeepSeek-本地部署保姆级教程"><a href="#🚀-DeepSeek-本地部署保姆级教程" class="headerlink" title="🚀 DeepSeek 本地部署保姆级教程"></a>🚀 DeepSeek 本地部署保姆级教程</h1><ul>
+<li>本文手把手教你如何实现 <strong>DeepSeek 大模型的本地部署</strong>，涵盖 <strong>软件准备</strong>、<strong>操作步骤</strong>、<strong>下载链接</strong> 及 <strong>避坑指南</strong>，助你轻松玩转本地 AI！✨</li>
+</ul>
+<hr>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol>
+<li><a href="#1-%E9%83%A8%E7%BD%B2%E5%89%8D%E5%87%86%E5%A4%87">部署前准备</a></li>
+<li><a href="#2-%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE">基础环境配置</a></li>
+<li><a href="#3-%E4%B8%80%E9%94%AE%E5%AE%89%E8%A3%85%E5%8C%85%E9%83%A8%E7%BD%B2%E6%8E%A8%E8%8D%90%E6%96%B0%E6%89%8B">一键安装包部署（推荐新手）</a></li>
+<li><a href="#4-%E6%89%8B%E5%8A%A8%E9%83%A8%E7%BD%B2%E8%BF%9B%E9%98%B6%E7%94%A8%E6%88%B7">手动部署（进阶用户）</a></li>
+<li><a href="#5-%E5%8F%AF%E8%A7%86%E5%8C%96%E7%95%8C%E9%9D%A2%E9%85%8D%E7%BD%AE">可视化界面配置</a></li>
+<li><a href="#6-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98">注意事项与常见问题</a></li>
+<li><a href="#7-%E6%80%BB%E7%BB%93">总结</a></li>
+</ol>
+<hr>
+<h2 id="1-部署前准备"><a href="#1-部署前准备" class="headerlink" title="1. 部署前准备"></a>1. 部署前准备</h2><h3 id="📋-硬件与软件要求"><a href="#📋-硬件与软件要求" class="headerlink" title="📋 硬件与软件要求"></a>📋 硬件与软件要求</h3><table>
+<thead>
+<tr>
+<th>类别</th>
+<th>最低配置</th>
+<th>推荐配置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>CPU</strong></td>
+<td>4 核以上</td>
+<td>多核高性能 CPU（如 Intel i7&#x2F;i9）</td>
+</tr>
+<tr>
+<td><strong>GPU</strong></td>
+<td>支持 CUDA 的 NVIDIA 显卡</td>
+<td>NVIDIA A100&#x2F;H100 或 RTX 4090</td>
+</tr>
+<tr>
+<td><strong>内存</strong></td>
+<td>16GB</td>
+<td>32GB 及以上</td>
+</tr>
+<tr>
+<td><strong>存储</strong></td>
+<td>50GB 空闲空间</td>
+<td>NVMe SSD 或高速硬盘</td>
+</tr>
+<tr>
+<td><strong>系统</strong></td>
+<td>Windows 10&#x2F;11 或 Ubuntu 20.04</td>
+<td>Ubuntu 22.04 LTS</td>
+</tr>
+<tr>
+<td><strong>其他</strong></td>
+<td>Python 3.8+</td>
+<td>Docker 环境（可选）</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>💡 <strong>提示</strong>：  </p>
+<ul>
+<li>普通笔记本建议部署 <strong>1.5B~7B 参数的小模型</strong>，大模型需高端 GPU 支持:cite[10]。</li>
+<li>企业级应用推荐使用 <strong>多卡 GPU 服务器</strong>（如 4 卡 NVIDIA A100）:cite[10]。</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="2-基础环境配置"><a href="#2-基础环境配置" class="headerlink" title="2. 基础环境配置"></a>2. 基础环境配置</h2><h3 id="🛠️-必要软件安装"><a href="#🛠️-必要软件安装" class="headerlink" title="🛠️ 必要软件安装"></a>🛠️ 必要软件安装</h3><ol>
+<li><p><strong>Python 环境</strong>  </p>
+<ul>
+<li>下载地址：<a target="_blank" rel="noopener" href="https://www.python.org/downloads/">Python 官网</a></li>
+<li>安装时勾选 <code>Add Python to PATH</code>，完成后验证：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python --version  <span class="comment"># 应显示 3.8+</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>CUDA 与 cuDNN</strong>（仅 GPU 用户）  </p>
+<ul>
+<li>CUDA 12.2：<a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-downloads">NVIDIA 官网下载</a></li>
+<li>cuDNN 8.9：<a target="_blank" rel="noopener" href="https://developer.nvidia.com/cudnn">注册后下载</a></li>
+</ul>
+</li>
+<li><p><strong>Git 工具</strong>  </p>
+<ul>
+<li>下载地址：<a target="_blank" rel="noopener" href="https://git-scm.com/downloads">Git 官网</a></li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="3-一键安装包部署（推荐新手）"><a href="#3-一键安装包部署（推荐新手）" class="headerlink" title="3. 一键安装包部署（推荐新手）"></a>3. 一键安装包部署（推荐新手）</h2><h3 id="📥-下载安装包"><a href="#📥-下载安装包" class="headerlink" title="📥 下载安装包"></a>📥 下载安装包</h3><ul>
+<li><strong>Windows&#x2F;Mac 一键包</strong>：<a target="_blank" rel="noopener" href="https://pan.quark.cn/s/5d2991492e42">Quark 网盘下载</a>（含预配置环境）:cite[5]。</li>
+<li><strong>Linux 脚本</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">  wget https://ollama.com/download/ollama-linux-amd64</span><br><span class="line">  <span class="built_in">chmod</span> +x ollama-linux-amd64</span><br><span class="line">  <span class="built_in">sudo</span> ./ollama-linux-amd64</span><br><span class="line"></span><br><span class="line"><span class="comment">### 🚀 部署步骤</span></span><br><span class="line"></span><br><span class="line">1. **解压安装包**</span><br><span class="line"></span><br><span class="line">   ```bash</span><br><span class="line">   unzip deepseek-local.zip &amp;&amp; <span class="built_in">cd</span> deepseek-local</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ol start="2">
+<li><p><strong>启动安装脚本</strong></p>
+<ul>
+<li><p>Windows：双击 <code>install.bat</code></p>
+</li>
+<li><p>Linux&#x2F;Mac：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x install.sh &amp;&amp; ./install.sh</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>选择模型版本</strong></p>
+<ul>
+<li>根据硬件选择参数规模（推荐 <code>7B</code> 或 <code>13B</code>）。</li>
+</ul>
+</li>
+<li><p><strong>完成验证</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python test_deployment.py  <span class="comment"># 输出 &quot;Hello, DeepSeek!&quot; 即成功</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr>
+<h2 id="4-手动部署（进阶用户）-PS：命令窗口执行-win-r-输入cmd即可"><a href="#4-手动部署（进阶用户）-PS：命令窗口执行-win-r-输入cmd即可" class="headerlink" title="4. 手动部署（进阶用户）[PS：命令窗口执行(win + r 输入cmd即可)]"></a>4. 手动部署（进阶用户）[PS：命令窗口执行(win + r 输入cmd即可)]</h2><h3 id="📦-使用-Ollama-工具"><a href="#📦-使用-Ollama-工具" class="headerlink" title="📦 使用 Ollama 工具"></a>📦 使用 Ollama 工具</h3><ol>
+<li><p><strong>安装 Ollama</strong></p>
+<ul>
+<li><p>官网下载：<a target="_blank" rel="noopener" href="https://ollama.com/">Ollama 官网</a></p>
+</li>
+<li><p>验证安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ollama --version</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>下载 DeepSeek 模型</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ollama pull deepseek-r1  <span class="comment"># 默认下载 7B 版本:cite[6]</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>启动模型服务</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ollama run deepseek-r1</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="🔧-高级配置（可选）"><a href="#🔧-高级配置（可选）" class="headerlink" title="🔧 高级配置（可选）"></a>🔧 高级配置（可选）</h3><ul>
+<li><p><strong>多 GPU 并行</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> CUDA_VISIBLE_DEVICES=0,1  <span class="comment"># 指定 GPU 编号</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>内存优化</strong>：<br>修改 <code>config.yaml</code> 中的 <code>batch_size</code> 和 <code>max_seq_len</code> 参数。</p>
+</li>
+</ul>
+<hr>
+<h2 id="5-可视化界面配置"><a href="#5-可视化界面配置" class="headerlink" title="5. 可视化界面配置"></a>5. 可视化界面配置</h2><h3 id="🌈-使用-Chatbox（推荐）"><a href="#🌈-使用-Chatbox（推荐）" class="headerlink" title="🌈 使用 Chatbox（推荐）"></a>🌈 使用 Chatbox（推荐）</h3><ol>
+<li><strong>下载安装</strong><ul>
+<li>官网地址：<a target="_blank" rel="noopener" href="https://chatboxai.app/zh">Chatbox 官网</a></li>
+<li>支持 Windows&#x2F;Mac&#x2F;Linux。</li>
+</ul>
+</li>
+<li><strong>连接本地模型</strong><ul>
+<li>设置 → API 类型选择 <code>Ollama</code> → 输入地址 <code>http://localhost:11434</code>。</li>
+</ul>
+</li>
+<li><strong>功能体验</strong><ul>
+<li><strong>文件分析</strong>：上传 PDF&#x2F;TXT 文件直接提问</li>
+<li><strong>联网搜索</strong>：开启侧边栏的 <code>Web Search</code> 开关。</li>
+</ul>
+</li>
+</ol>
+<h3 id="🌐-浏览器插件-Page-Assist"><a href="#🌐-浏览器插件-Page-Assist" class="headerlink" title="🌐 浏览器插件 Page Assist"></a>🌐 浏览器插件 Page Assist</h3><ol>
+<li><strong>安装插件</strong><ul>
+<li>Chrome 商店：<a target="_blank" rel="noopener" href="https://chrome.google.com/webstore/detail/page-assist/deepseek-rag">Page Assist 扩展</a></li>
+</ul>
+</li>
+<li><strong>配置本地 API</strong><ul>
+<li>设置 → 绑定 <code>http://localhost:11434</code> → 启用 <code>DeepSeek-R1</code>。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="6-注意事项与常见问题"><a href="#6-注意事项与常见问题" class="headerlink" title="6. 注意事项与常见问题"></a>6. 注意事项与常见问题</h2><h3 id="⚠️-避坑指南"><a href="#⚠️-避坑指南" class="headerlink" title="⚠️ 避坑指南"></a>⚠️ 避坑指南</h3><ol>
+<li><strong>模型选择</strong><ul>
+<li>普通 PC 建议使用 <code>7B</code> 版本，<code>67B</code> 需至少 32GB 内存11。</li>
+</ul>
+</li>
+<li><strong>性能优化</strong><ul>
+<li>关闭不必要的后台程序，优先使用 Linux 系统。</li>
+</ul>
+</li>
+<li><strong>错误处理</strong><ul>
+<li><strong>CUDA 内存不足</strong>：减小 <code>batch_size</code> 或使用 CPU 模式。</li>
+<li><strong>响应延迟</strong>：升级 GPU 驱动或使用量化模型。</li>
+</ul>
+</li>
+</ol>
+<h3 id="❓-常见问题"><a href="#❓-常见问题" class="headerlink" title="❓ 常见问题"></a>❓ 常见问题</h3><ul>
+<li><strong>Q：如何更新模型？</strong><br>A：运行 <code>ollama pull deepseek-r1:latest</code>。</li>
+<li><strong>Q：支持哪些文件格式？</strong><br>A：PDF、TXT、CSV、DOCX（需通过 Chatbox 上传）。</li>
+</ul>
+<hr>
+<h2 id="7-总结"><a href="#7-总结" class="headerlink" title="7. 总结"></a>7. 总结</h2><p>通过本地部署 DeepSeek，你可以获得以下优势：</p>
+<ul>
+<li>✅ <strong>数据隐私</strong>：所有计算在本地完成，无需上传云端</li>
+<li>✅ <strong>离线使用</strong>：无网络环境下仍可运行</li>
+<li>✅ <strong>高性能定制</strong>：支持模型微调和二次开发</li>
+</ul>
+<p><strong>无论是个人学习还是企业应用，DeepSeek 的本地化方案都能为你提供 <strong>安全</strong>、</strong>高效<strong>、</strong>灵活** 的 AI 体验！🚀**</p>
+<hr>
+<p><strong>附：官方资源汇总</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.deepseek.com/">DeepSeek 官网</a></li>
+<li><a target="_blank" rel="noopener" href="https://ollama.com/">Ollama 下载</a></li>
+<li><a target="_blank" rel="noopener" href="https://chatboxai.app/zh">Chatbox 官网</a></li>
+<li><a target="_blank" rel="noopener" href="https://chrome.google.com/webstore/detail/page-assist/deepseek-rag">Page Assist 插件</a></li>
+</ul>
+<blockquote>
+<p>🌟 <strong>提示</strong>：遇到问题可加入 <a target="_blank" rel="noopener" href="https://deepseek.com/community">DeepSeek 开发者社区</a> 获取支持！</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">阿文</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/02/28/%F0%9F%9A%80%20DeepSeek%20%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E7%A8%8B/">http://example.com/2025/02/28/%F0%9F%9A%80%20DeepSeek%20%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E7%A8%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">社畜阿文</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/AI/">AI</a></div><div class="post-share"><div class="social-share" data-image="/img/deepseek.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>赞助</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/%E5%BE%AE%E4%BF%A1.jpg" target="_blank"><img class="post-qr-code-img" src="/img/%E5%BE%AE%E4%BF%A1.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/%E6%94%AF%E4%BB%98%E5%AE%9D.jpg" target="_blank"><img class="post-qr-code-img" src="/img/%E6%94%AF%E4%BB%98%E5%AE%9D.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/02/28/%F0%9F%9A%80%20JDK%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B8%8E%20CGLIB%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/" title="🚀 JDK 动态代理与 CGLIB 动态代理详解"><img class="cover" src="/img/39.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">🚀 JDK 动态代理与 CGLIB 动态代理详解</div></div><div class="info-2"><div class="info-item-1">本文深入讲解 JDK 动态代理 和 CGLIB 动态代理 的区别、实现原理、应用场景，并通过 示例代码 和 详细注释 帮助你彻底掌握这两种代理技术！✨ 目录 JDK 动态代理 vs CGLIB 动态代理 JDK 动态代理实现原理 JDK 动态代理示例 扩展 JDK 动态代理示例 CGLIB 动态代理实现原理 CGLIB 动态代理示例 总结   1. JDK 动态代理 vs CGLIB 动态代理核心区别   特性 JDK 动态代理 CGLIB 动态代理    代理对象类型 基于接口 基于类（无需接口）   性能 较慢（反射调用） 较快（字节码生成）   依赖 无需额外依赖 需要引入 CGLIB 库   限制 只能代理实现了接口的类 不能代理 final 类或方法   实现原理 反射 + 动态生成代理类 字节码生成 + 继承   适用场景 JDK 动态代理：适用于代理接口或需要轻量级代理的场景。 CGLIB 动态代理：适用于代理类或需要高性能代理的场景。   2. JDK 动态代理实现原理核心机制 反射调用：通过 java.lang.reflect.Proxy...</div></div></div></a><a class="pagination-related" href="/2025/02/28/DeepSeek-R1%20%E6%8E%A5%E5%85%A5%20WPS%20%E5%AE%8C%E6%95%B4%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/" title="🚀 DeepSeek-R1 接入 WPS 完整开发指南"><img class="cover" src="/img/37.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">🚀 DeepSeek-R1 接入 WPS 完整开发指南</div></div><div class="info-2"><div class="info-item-1">DeepSeek-R1 接入 WPS 完整开发指南为什么要将DeepSeek-R1接入WPS？将DeepSeek-R1接入WPS可带来三大核心价值：  智能内容生成 - 自动生成报告&#x2F;文案&#x2F;数据分析 效率提升 - 减少80%重复性文档编辑工作 智能办公 - 实现文档自动排版&#x2F;数据可视化&#x2F;多语言翻译 知识管理 - 自动构建企业知识库文档体系   第一步：获取DeepSeek-R1 API Key操作流程 访问DeepSeek开发者平台  注册账号并完成企业认证（个人开发者选择个人认证）  进入控制台 → 「API密钥管理」  点击「创建新密钥」生成API Key 【PS:要保存好密钥，复制完保存起来，忘记只能重新申请】   12// 示例密钥格式（请勿泄露）const API_KEY = &#x27;dsk-3e5f7g9h2j4k6m8n1p3q5r7t9v1x3z5&#x27;;   第二步：配置WPS开发环境2.1 启用开发者模式 WPS Office → 右上角「设置」→ 「配置和修复工具」 选择「高级」→...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/02/28/DeepSeek-R1%20%E6%8E%A5%E5%85%A5%20WPS%20%E5%AE%8C%E6%95%B4%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/" title="🚀 DeepSeek-R1 接入 WPS 完整开发指南"><img class="cover" src="/img/37.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-28</div><div class="info-item-2">🚀 DeepSeek-R1 接入 WPS 完整开发指南</div></div><div class="info-2"><div class="info-item-1">DeepSeek-R1 接入 WPS 完整开发指南为什么要将DeepSeek-R1接入WPS？将DeepSeek-R1接入WPS可带来三大核心价值：  智能内容生成 - 自动生成报告&#x2F;文案&#x2F;数据分析 效率提升 - 减少80%重复性文档编辑工作 智能办公 - 实现文档自动排版&#x2F;数据可视化&#x2F;多语言翻译 知识管理 - 自动构建企业知识库文档体系   第一步：获取DeepSeek-R1 API Key操作流程 访问DeepSeek开发者平台  注册账号并完成企业认证（个人开发者选择个人认证）  进入控制台 → 「API密钥管理」  点击「创建新密钥」生成API Key 【PS:要保存好密钥，复制完保存起来，忘记只能重新申请】   12// 示例密钥格式（请勿泄露）const API_KEY = &#x27;dsk-3e5f7g9h2j4k6m8n1p3q5r7t9v1x3z5&#x27;;   第二步：配置WPS开发环境2.1 启用开发者模式 WPS Office → 右上角「设置」→ 「配置和修复工具」 选择「高级」→...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/TouXing.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">阿文</div><div class="author-info-description">一个致力于分享知识，日常，沙雕的博主</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">25</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>视奸我</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎欢迎，热烈欢迎</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%9A%80-DeepSeek-%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">🚀 DeepSeek 本地部署保姆级教程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-number">1.1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%83%A8%E7%BD%B2%E5%89%8D%E5%87%86%E5%A4%87"><span class="toc-number">1.2.</span> <span class="toc-text">1. 部署前准备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%8B-%E7%A1%AC%E4%BB%B6%E4%B8%8E%E8%BD%AF%E4%BB%B6%E8%A6%81%E6%B1%82"><span class="toc-number">1.2.1.</span> <span class="toc-text">📋 硬件与软件要求</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-number">1.3.</span> <span class="toc-text">2. 基础环境配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%9B%A0%EF%B8%8F-%E5%BF%85%E8%A6%81%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-number">1.3.1.</span> <span class="toc-text">🛠️ 必要软件安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%B8%80%E9%94%AE%E5%AE%89%E8%A3%85%E5%8C%85%E9%83%A8%E7%BD%B2%EF%BC%88%E6%8E%A8%E8%8D%90%E6%96%B0%E6%89%8B%EF%BC%89"><span class="toc-number">1.4.</span> <span class="toc-text">3. 一键安装包部署（推荐新手）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%A5-%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85%E5%8C%85"><span class="toc-number">1.4.1.</span> <span class="toc-text">📥 下载安装包</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%89%8B%E5%8A%A8%E9%83%A8%E7%BD%B2%EF%BC%88%E8%BF%9B%E9%98%B6%E7%94%A8%E6%88%B7%EF%BC%89-PS%EF%BC%9A%E5%91%BD%E4%BB%A4%E7%AA%97%E5%8F%A3%E6%89%A7%E8%A1%8C-win-r-%E8%BE%93%E5%85%A5cmd%E5%8D%B3%E5%8F%AF"><span class="toc-number">1.5.</span> <span class="toc-text">4. 手动部署（进阶用户）[PS：命令窗口执行(win + r 输入cmd即可)]</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%A6-%E4%BD%BF%E7%94%A8-Ollama-%E5%B7%A5%E5%85%B7"><span class="toc-number">1.5.1.</span> <span class="toc-text">📦 使用 Ollama 工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%94%A7-%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="toc-number">1.5.2.</span> <span class="toc-text">🔧 高级配置（可选）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%8F%AF%E8%A7%86%E5%8C%96%E7%95%8C%E9%9D%A2%E9%85%8D%E7%BD%AE"><span class="toc-number">1.6.</span> <span class="toc-text">5. 可视化界面配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8C%88-%E4%BD%BF%E7%94%A8-Chatbox%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="toc-number">1.6.1.</span> <span class="toc-text">🌈 使用 Chatbox（推荐）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8C%90-%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6-Page-Assist"><span class="toc-number">1.6.2.</span> <span class="toc-text">🌐 浏览器插件 Page Assist</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-number">1.7.</span> <span class="toc-text">6. 注意事项与常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9A%A0%EF%B8%8F-%E9%81%BF%E5%9D%91%E6%8C%87%E5%8D%97"><span class="toc-number">1.7.1.</span> <span class="toc-text">⚠️ 避坑指南</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9D%93-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-number">1.7.2.</span> <span class="toc-text">❓ 常见问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E6%80%BB%E7%BB%93"><span class="toc-number">1.8.</span> <span class="toc-text">7. 总结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/02/28/%F0%9F%8C%9F%20MyBatis%20%E4%B8%AD%E7%9A%84%2010%20%E4%B8%AA%E5%AE%9D%E8%97%8F%E6%8A%80%E5%B7%A7/" title="🌟 MyBatis 中的 10 个宝藏技巧"><img src="/img/6.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="🌟 MyBatis 中的 10 个宝藏技巧"/></a><div class="content"><a class="title" href="/2025/02/28/%F0%9F%8C%9F%20MyBatis%20%E4%B8%AD%E7%9A%84%2010%20%E4%B8%AA%E5%AE%9D%E8%97%8F%E6%8A%80%E5%B7%A7/" title="🌟 MyBatis 中的 10 个宝藏技巧">🌟 MyBatis 中的 10 个宝藏技巧</a><time datetime="2025-02-27T16:00:00.000Z" title="发表于 2025-02-28 00:00:00">2025-02-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/02/28/%F0%9F%9A%80%20MySQL%20%E7%9A%84%2014%20%E4%B8%AA%E5%AE%9D%E8%97%8F%E5%8A%9F%E8%83%BD%E8%AF%A6%E8%A7%A3/" title="🚀 MySQL 的 14 个宝藏功能深度解析"><img src="/img/40.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="🚀 MySQL 的 14 个宝藏功能深度解析"/></a><div class="content"><a class="title" href="/2025/02/28/%F0%9F%9A%80%20MySQL%20%E7%9A%84%2014%20%E4%B8%AA%E5%AE%9D%E8%97%8F%E5%8A%9F%E8%83%BD%E8%AF%A6%E8%A7%A3/" title="🚀 MySQL 的 14 个宝藏功能深度解析">🚀 MySQL 的 14 个宝藏功能深度解析</a><time datetime="2025-02-27T16:00:00.000Z" title="发表于 2025-02-28 00:00:00">2025-02-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/02/28/%F0%9F%9A%80%20JDK%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B8%8E%20CGLIB%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/" title="🚀 JDK 动态代理与 CGLIB 动态代理详解"><img src="/img/39.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="🚀 JDK 动态代理与 CGLIB 动态代理详解"/></a><div class="content"><a class="title" href="/2025/02/28/%F0%9F%9A%80%20JDK%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B8%8E%20CGLIB%20%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/" title="🚀 JDK 动态代理与 CGLIB 动态代理详解">🚀 JDK 动态代理与 CGLIB 动态代理详解</a><time datetime="2025-02-27T16:00:00.000Z" title="发表于 2025-02-28 00:00:00">2025-02-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/02/28/%F0%9F%9A%80%20DeepSeek%20%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E7%A8%8B/" title="🚀 DeepSeek 本地部署保姆级教程"><img src="/img/deepseek.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="🚀 DeepSeek 本地部署保姆级教程"/></a><div class="content"><a class="title" href="/2025/02/28/%F0%9F%9A%80%20DeepSeek%20%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E7%A8%8B/" title="🚀 DeepSeek 本地部署保姆级教程">🚀 DeepSeek 本地部署保姆级教程</a><time datetime="2025-02-27T16:00:00.000Z" title="发表于 2025-02-28 00:00:00">2025-02-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/02/28/DeepSeek-R1%20%E6%8E%A5%E5%85%A5%20WPS%20%E5%AE%8C%E6%95%B4%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/" title="🚀 DeepSeek-R1 接入 WPS 完整开发指南"><img src="/img/37.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="🚀 DeepSeek-R1 接入 WPS 完整开发指南"/></a><div class="content"><a class="title" href="/2025/02/28/DeepSeek-R1%20%E6%8E%A5%E5%85%A5%20WPS%20%E5%AE%8C%E6%95%B4%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/" title="🚀 DeepSeek-R1 接入 WPS 完整开发指南">🚀 DeepSeek-R1 接入 WPS 完整开发指南</a><time datetime="2025-02-27T16:00:00.000Z" title="发表于 2025-02-28 00:00:00">2025-02-28</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/deepseek.png);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By 阿文</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.3</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+
+  const disqusReset = conf => {
+    window.DISQUS && window.DISQUS.reset({
+      reload: true,
+      config: conf
+    })
+  }
+
+  const loadDisqus = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyDisqus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    window.disqus_identifier = isShuoshuo ? path : '/2025/02/28/%F0%9F%9A%80%20DeepSeek%20%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E7%A8%8B/'
+    window.disqus_url = isShuoshuo ? location.origin + path : 'http://example.com/2025/02/28/%F0%9F%9A%80%20DeepSeek%20%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E7%A8%8B/'
+
+    const disqus_config = function () {
+      this.page.url = disqus_url
+      this.page.identifier = disqus_identifier
+      this.page.title = '🚀 DeepSeek 本地部署保姆级教程'
+    }
+
+    if (window.DISQUS) disqusReset(disqus_config)
+    else {
+      const script = document.createElement('script')
+      script.src = 'https://.disqus.com/embed.js'
+      script.setAttribute('data-timestamp', +new Date())
+      document.head.appendChild(script)
+    }
+
+    btf.addGlobalFn('themeChange', () => disqusReset(disqus_config), 'disqus')
+  }
+
+  const getCount = async() => {
+    try {
+      const eleGroup = document.querySelector('#post-meta .disqus-comment-count')
+      if (!eleGroup) return
+      const cleanedLinks = eleGroup.href.replace(/#post-comment$/, '')
+
+      const res = await fetch(`https://disqus.com/api/3.0/threads/set.json?forum=&api_key=&thread:link=${cleanedLinks}`,{
+        method: 'GET'
+      })
+      const result = await res.json()
+
+      const count = result.response.length ? result.response[0].posts : 0
+      eleGroup.textContent = count
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Disqus' === 'Disqus'
+      ? window.shuoshuoComment = { loadComment: loadDisqus }
+      : window.loadOtherComment = loadDisqus
+    return
+  }
+
+  if ('Disqus' === 'Disqus' || !true) {
+    if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+    else {
+      loadDisqus()
+      
+    }
+  } else {
+    window.loadOtherComment = loadDisqus
+  }
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
