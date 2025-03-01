@@ -1,0 +1,62 @@
+#love-page {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 20px;
+}
+
+#love-clock {
+    text-align: center;
+    background: rgba(255,255,255,0.8);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.time-box {
+    margin-bottom: 1.5rem;
+}
+
+#love-days {
+    font-size: 3.5rem;
+    color: #ff4c4c;
+    font-weight: bold;
+}
+
+.time-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.time-unit {
+    background: rgba(255,76,76,0.1);
+    padding: 1rem 2rem;
+    border-radius: 10px;
+}
+
+#love-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.photo-item {
+    height: 400px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    position: relative;
+    transition: transform 0.3s;
+}
+
+@media (max-width: 768px) {
+    #love-days {
+        font-size: 2.5rem;
+    }
+    .time-container {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+}
