@@ -1,62 +1,106 @@
-#love-page {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 20px;
-}
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 
-#love-clock {
-    text-align: center;
-    background: rgba(255,255,255,0.8);
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    margin-bottom: 2rem;
-}
-
-.time-box {
-    margin-bottom: 1.5rem;
-}
-
-#love-days {
-    font-size: 3.5rem;
-    color: #ff4c4c;
-    font-weight: bold;
-}
-
-.time-container {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-}
-
-.time-unit {
-    background: rgba(255,76,76,0.1);
-    padding: 1rem 2rem;
-    border-radius: 10px;
-}
-
-#love-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px;
-}
-
-.photo-item {
-    height: 400px;
-    background-size: cover;
-    background-position: center;
-    border-radius: 10px;
+/* 基础样式 */
+.love-container {
     position: relative;
-    transition: transform 0.3s;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
 }
 
-@media (max-width: 768px) {
-    #love-days {
-        font-size: 2.5rem;
+/* 头像样式 */
+.avatar-box {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 5%;
+    z-index: 2;
+
+img {
+    width: 90%;
+    height: 90%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #87CEEB; /* 蓝天色边框 */
+    position: relative;
+    z-index: 2;
+    box-shadow:
+            0 0 10px #87CEEB, /* 内层蓝天色光晕 */
+            0 0 20px #ADD8E6; /* 外层浅蓝色光晕 */
+    animation: glow 3s ease-in-out infinite alternate;
+}
+
+/* 光晕动画 */
+@keyframes glow {
+    0% {
+        box-shadow:
+                0 0 10px #87CEEB,
+                0 0 20px #ADD8E6;
     }
-    .time-container {
-        flex-wrap: wrap;
-        gap: 1rem;
+    100% {
+        box-shadow:
+                0 0 20px #87CEEB,
+                0 0 40px #ADD8E6;
     }
 }
+
+&.left {
+     left: 5%;
+ }
+
+&.right {
+     right: 5%;
+ }
+}
+
+/* 心形图片容器 */
+#heart-core {
+    position: absolute;
+    left: 50%;
+    top: 15%; /* 调整垂直位置 */
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    text-align: center;
+}
+
+/* 心形图片样式 */
+.heart-image {
+    width: 60px; /* 调整图片宽度 */
+    height: auto; /* 高度自适应 */
+    display: block;
+    margin: 0 auto; /* 水平居中 */
+    filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.5)); /* 添加阴影 */
+}
+
+/* 天数文字容器 */
+#love-days {
+    position: absolute;
+    top: -55px; /* 调整文字垂直位置（负值表示向上移动） */
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Pacifico', cursive; /* 更换字体 */
+    font-size: 1.5rem; /* 调整字体大小 */
+    color: white; /* 字体颜色 */
+    background: rgba(255, 105, 180, 0.8); /* 字体背景颜色 */
+    padding: 10px 20px; /* 背景内边距 */
+    border-radius: 20px; /* 背景圆角 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* 背景阴影 */
+    z-index: 4; /* 确保文字在心形图片上方 */
+    white-space: nowrap; /* 防止数字换行 */
+}
+
+/* 路径样式 */
+.paths path {
+    stroke-dasharray: 1000; /* 虚线长度 */
+    stroke-dashoffset: 1000; /* 虚线偏移 */
+    animation: draw 2s ease-out forwards; /* 绘制动画 */
+    filter: drop-shadow(0 0 5px rgba(135, 206, 235, 0.8)); /* 添加光晕 */
+}
+
+/* 绘制动画关键帧 */
+@keyframes draw {
+    to {
+        stroke-dashoffset: 0; /* 从偏移到无偏移，实现绘制效果 */
+    }
+}
+
