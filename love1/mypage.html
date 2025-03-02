@@ -2,584 +2,499 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Eternal Love | 永恒之恋</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>❤欢迎光临我们的小窝❤</title>
     <style>
-        /* ===== 基础样式 ===== */
+        /* ========== 基础样式 ========== */
         :root {
-            --primary: #FF6B6B; /* 主色调 */
-            --secondary: #FF9B9B; /* 副色调 */
-            --accent: #FFD3B6; /* 强调色 */
-            --text: #4A4A4A; /* 文字颜色 */
-            --radius: 20px; /* 圆角大小 */
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1); /* 阴影效果 */
-            --glass: rgba(255, 255, 255, 0.9); /* 磨砂玻璃背景 */
+            --main-color: rgba(0, 150, 255, 0.8);
+            --glow-effect: 0 0 50px rgba(0, 150, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            touch-action: manipulation;
         }
 
         body {
-            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif; /* 字体设置 */
-            background: linear-gradient(135deg, #fff1f4 0%, #ffe8eb 100%); /* 背景渐变 */
-            color: var(--text); /* 文字颜色 */
-            line-height: 1.8; /* 行高 */
+            min-height: 100vh;
+            background: #000;
+            font-family: 'Microsoft YaHei', sans-serif;
+            overflow: auto;
+            overflow-x: hidden;
+            color: #fff;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .section {
-            padding: 6rem 1.5rem; /* 板块内边距 */
+        /* ========== Canvas容器 ========== */
+        .canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+        }
+
+        #stars { z-index: 1; }
+        #code-rain {
+            z-index: 2;
+            opacity: 0.25;
+        }
+
+        /* ========== 主内容容器 ========== */
+        .main-container {
             position: relative;
+            z-index: 3;
+            padding: 50px 20px;
+            margin-top: 5vh;
         }
 
-        .container {
-            max-width: 1200px; /* 容器最大宽度 */
-            margin: 0 auto; /* 居中 */
-            padding: 0 1.5rem; /* 内边距 */
-        }
-
-        /* ===== 磨砂玻璃通用样式 ===== */
-        .glass-effect {
-            background: var(--glass); /* 磨砂玻璃背景 */
-            backdrop-filter: blur(12px); /* 背景模糊 */
-            border-radius: var(--radius); /* 圆角 */
-            box-shadow: var(--shadow); /* 阴影 */
-            border: 1px solid rgba(255, 255, 255, 0.3); /* 边框 */
-            transition: transform 0.3s ease, box-shadow 0.3s ease; /* 过渡动画 */
-        }
-
-        .glass-effect:hover {
-            transform: scale(1.02); /* 悬停放大 */
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15); /* 悬停阴影 */
-        }
-
-        /* ===== 头像板块 ===== */
-        .hero-section {
-            background: linear-gradient(45deg,
-            rgba(255,107,107,0.05),
-            rgba(255,155,155,0.05)); /* 背景渐变 */
-            backdrop-filter: blur(12px); /* 背景模糊 */
+        /* ========== 情侣信息板块 ========== */
+        .couple-section {
+            width: min(600px, 90%);
+            margin: 30px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
         }
 
         .avatar-container {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr; /* 三列布局 */
+            display: flex;
+            justify-content: center;
+            gap: 20px;
             align-items: center;
-            gap: 2rem; /* 间距 */
-            max-width: 1000px; /* 最大宽度 */
-            margin: 0 auto; /* 居中 */
-            padding: 2rem; /* 内边距 */
         }
 
-        .avatar-card {
-            width: 160px; /* 头像大小 */
-            height: 160px;
-            margin: 0 auto; /* 居中 */
-            border-radius: 50%; /* 圆形 */
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 2px solid var(--main-color);
+            transition: all 0.3s ease;
+        }
+
+        .avatar:hover {
+            transform: scale(1.1);
+        }
+
+        .heart {
+            font-size: 40px;
+            color: #ff3366;
+            animation: heartbeat 1.2s infinite;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        .timer {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 20px;
+            font-family: '楷体', cursive;
+            text-shadow: 0 0 10px rgba(255,51,102,0.5);
+        }
+
+        /* ========== 语录板块 ========== */
+        .quotes-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 50px auto;
+        }
+
+        .quote-card {
             position: relative;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* 过渡动画 */
-            background: linear-gradient(45deg,
-            var(--primary) 0%,
-            var(--secondary) 100%); /* 渐变背景 */
-            padding: 3px; /* 内边距 */
-            box-shadow: var(--shadow); /* 阴影 */
+            padding: 30px;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            min-height: 200px;
+            border: 1px solid rgba(255,255,255,0.15);
+            overflow: hidden;
         }
 
-        .avatar-card::after {
+        .quote-card::before {
             content: '';
             position: absolute;
-            width: calc(100% + 6px); /* 外圈大小 */
-            height: calc(100% + 6px);
-            border-radius: 50%; /* 圆形 */
-            top: -3px;
-            left: -3px;
-            background: linear-gradient(45deg,
-            var(--primary),
-            var(--secondary)); /* 渐变背景 */
+            top: -150%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                    45deg,
+                    transparent 25%,
+                    rgba(255, 51, 102, 0.1) 50%,
+                    transparent 75%
+            );
+            animation: flow 12s linear infinite;
             z-index: -1;
-            animation: rotate 12s linear infinite; /* 旋转动画 */
         }
 
-        .avatar-card img {
+        .quote-content {
+            position: relative;
+            z-index: 2;
+            font-family: '华文行楷', cursive;
+            font-size: 18px;
+            line-height: 1.6;
+            text-shadow: 0 0 10px rgba(255,51,102,0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .quote-card:hover .quote-content {
+            transform: translateY(-3px);
+        }
+
+        @keyframes flow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ========== 相册板块 ========== */
+        .gallery-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            height: 60vh;
+            overflow-y: auto;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .gallery-section {
+            columns: 3 300px;
+            gap: 20px;
+        }
+
+        .photo-item {
+            position: relative;
+            margin-bottom: 20px;
+            break-inside: avoid;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .photo-item img {
             width: 100%;
-            height: 100%;
-            object-fit: cover; /* 图片填充 */
-            border-radius: 50%; /* 圆形 */
-            border: 2px solid white; /* 边框 */
+            height: auto;
+            transition: transform 0.3s ease;
         }
 
-        /* ===== 时间计数器 ===== */
-        .days-counter {
-            padding: 2rem; /* 内边距 */
-            background: rgba(255,255,255,0.85); /* 背景 */
-            border-radius: var(--radius); /* 圆角 */
-            backdrop-filter: blur(8px); /* 背景模糊 */
-            box-shadow: var(--shadow); /* 阴影 */
-            border: 1px solid rgba(255,107,107,0.2); /* 边框 */
+        .photo-item:hover img {
+            transform: scale(1.05);
         }
 
-        .time-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 四列布局 */
-            gap: 1rem; /* 间距 */
-        }
-
-        .time-unit {
-            text-align: center; /* 文字居中 */
-            padding: 0.5rem; /* 内边距 */
-        }
-
-        .time-value {
-            font-size: 2.2rem; /* 字体大小 */
-            font-weight: 600; /* 字体粗细 */
-            color: var(--primary); /* 字体颜色 */
-            text-shadow: 0 2px 4px rgba(255,107,107,0.2); /* 文字阴影 */
-        }
-
-        .time-label {
-            font-size: 0.9rem; /* 字体大小 */
-            color: var(--text); /* 字体颜色 */
-            opacity: 0.8; /* 透明度 */
-        }
-
-        /* ===== 对话板块 ===== */
-        .dialogue-section {
-            background: linear-gradient(45deg,
-            rgba(255,214,184,0.1),
-            rgba(255,155,155,0.1)); /* 背景渐变 */
-            backdrop-filter: blur(8px); /* 背景模糊 */
-        }
-
-        .dialogue-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr; /* 两列布局 */
-            gap: 2rem; /*2 间距 */
-            max-width: 100%; /* 最大宽度 */
-            margin: 0 auto; /* 居中 */
-        }
-
-        .dialogue-bubble {
-            padding: 1.5rem; /* 内边距 */
-            border-radius: var(--radius); /* 圆角 */
-            backdrop-filter: blur(8px); /* 背景模糊 */
-            transition: all 0.3s ease; /* 过渡动画 */
-            box-shadow: var(--shadow); /* 阴影 */
-            min-height: 120px; /* 最小高度 */
-        }
-
-        /* 左侧对话气泡 */
-        .bubble-left {
-            background: rgba(255, 211, 182, 0.85); /* 背景颜色 */
-            margin-right: 15%; /* 右边距 */
-            transform-origin: left bottom; /* 变换原点 */
-            font-size: 25px;
-        }
-
-        /* 右侧对话气泡 */
-        .bubble-right {
-            background: rgba(255, 107, 107, 0.85); /* 背景颜色 */
-            color: white; /* 文字颜色 */
-            margin-left: 15%; /* 左边距 */
-            transform-origin: right bottom; /* 变换原点 */
-            font-size: 25px;
-        }
-
-        /* ===== 轮播图样式 ===== */
-        .carousel-container {
-            position: relative;
-            max-width: 1200px; /* 最大宽度 */
-            margin: 0 auto 3rem; /* 居中并添加下边距 */
-            overflow: hidden; /* 溢出隐藏 */
-            border-radius: var(--radius); /* 圆角 */
-            box-shadow: var(--shadow); /* 阴影 */
-            background: var(--glass); /* 背景 */
-            width: 100%; /* 宽度填满容器 */
-            height: 600px; /* 固定高度 */
-        }
-
-        .carousel-track {
-            display: flex; /* 弹性布局 */
-            transition: transform 0.8s cubic-bezier(0.33, 1, 0.68, 1); /* 过渡动画 */
-            height: 100%; /* 高度填满容器 */
-        }
-
-        .carousel-item {
-            flex: 0 0 100%; /* 每项宽度 */
-            min-width: 100%; /* 最小宽度 */
-            position: relative;
-            opacity: 0.9; /* 透明度 */
-            transition: opacity 0.8s; /* 过渡动画 */
-            height: 100%; /* 高度填满容器 */
-        }
-
-        .carousel-item.active {
-            opacity: 1; /* 激活状态透明度 */
-        }
-
-        .carousel-image {
-            width: 100%; /* 宽度填满容器 */
-            height: 100%; /* 高度填满容器 */
-            object-fit: cover; /* 图片填充 */
-            border-radius: var(--radius); /* 圆角 */
-            transform: scale(0.98); /* 缩放 */
-            transition: transform 0.8s; /* 过渡动画 */
-        }
-
-        .carousel-item.active .carousel-image {
-            transform: scale(1); /* 激活状态缩放 */
-        }
-
+        /* ========== 移动端适配 ========== */
         @media (max-width: 768px) {
-            .carousel-container {
-                height: 400px; /* 移动端高度 */
+            .couple-section {
+                padding: 20px;
             }
-        }
-
-        /* ===== 瀑布流相册 ===== */
-        .masonry-grid {
-            column-count: 3; /* 三列布局 */
-            column-gap: 20px; /* 列间距 */
-        }
-
-        .masonry-item {
-            break-inside: avoid; /* 防止内容断裂 */
-            margin-bottom: 20px; /* 下边距 */
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* 过渡动画 */
-            background: var(--glass); /* 背景 */
-            border-radius: calc(var(--radius) - 5px); /* 圆角 */
-            overflow: hidden; /* 溢出隐藏 */
-            box-shadow: var(--shadow); /* 阴影 */
-        }
-
-        .masonry-item:hover {
-            transform: scale(1.03); /* 悬停放大 */
-        }
-
-        /* ===== 留言板块 ===== */
-        .message-section {
-            background: linear-gradient(135deg,
-            rgba(255, 211, 182, 0.9) 0%,
-            rgba(255, 107, 107, 0.9) 100%); /* 背景渐变 */
-            backdrop-filter: blur(8px); /* 背景模糊 */
-        }
-
-        .message-card {
-            max-width: 800px; /* 最大宽度 */
-            margin: 0 auto; /* 居中 */
-            background: var(--glass); /* 背景 */
-            border-radius: var(--radius); /* 圆角 */
-            padding: 2rem; /* 内边距 */
-            box-shadow: var(--shadow); /* 阴影 */
-            border: 1px solid rgba(255,255,255,0.3); /* 边框 */
-        }
-
-        .message-card h5 {
-            font-size: 2.2rem; /* 1.2 字体大小 */
-            margin-bottom: 1rem; /* 下边距 */
-            color: var(--primary); /* 字体颜色 */
-        }
-
-        .message-card p {
-            font-size: 2rem; /* 1 字体大小 */
-            line-height: 1.6; /* 行高 */
-        }
-
-        /* ===== 响应式设计 ===== */
-        @media (max-width: 768px) {
-            .avatar-container {
-                grid-template-columns: 1fr; /* 单列布局 */
-                gap: 1.5rem; /* 间距 */
+            .avatar {
+                width: 80px;
+                height: 80px;
             }
-            .time-grid {
-                grid-template-columns: repeat(2, 1fr); /* 两列布局 */
+            .heart {
+                font-size: 30px;
             }
-            .carousel-image {
-                height: 400px; /* 图片高度 */
+            .timer {
+                font-size: 18px;
             }
-            .masonry-grid {
-                column-count: 2; /* 两列布局 */
+            .quotes-section {
+                grid-template-columns: 1fr;
+                gap: 20px;
             }
-        }
-
-        @media (max-width: 480px) {
-            .time-value {
-                font-size: 1.8rem; /* 字体大小 */
+            .quote-card {
+                font-size: 16px;
+                padding: 20px;
             }
-            .avatar-card {
-                width: 120px; /* 头像大小 */
-                height: 120px;
-            }
-            .masonry-grid {
-                column-count: 1; /* 单列布局 */
+            .gallery-section {
+                columns: 2 150px;
             }
         }
     </style>
 </head>
 <body>
-<!-- 音乐播放器 -->
-<div class="music-player">
-    <audio id="bgm" loop>
-        <source src="https://www.bensound.com/bensound-music/bensound-memories.mp3" type="audio/mpeg">
-    </audio>
-    <div class="music-btn" onclick="toggleMusic()">🎵</div>
+<!-- 星空背景 -->
+<div class="canvas-container">
+    <canvas id="stars"></canvas>
+    <canvas id="code-rain"></canvas>
 </div>
 
-<!-- 头像板块 -->
-<section class="section hero-section">
-    <div class="container">
+<!-- 主内容 -->
+<div class="main-container">
+    <!-- 情侣信息 -->
+    <section class="couple-section">
         <div class="avatar-container">
-            <!-- 男生头像 -->
-            <div class="avatar-card">
-                <img src="https://pic1.imgdb.cn/item/67c42948d0e0a243d40a15cf.jpg" alt="男生">
-            </div>
-
-            <!-- 时间计数器 -->
-            <div class="days-counter glass-effect">
-                <div class="time-grid">
-                    <div class="time-unit">
-                        <div class="time-value" id="daysCount">791</div>
-                        <div class="time-label">天</div>
-                    </div>
-                    <div class="time-unit">
-                        <div class="time-value" id="hoursCount">18</div>
-                        <div class="time-label">小时</div>
-                    </div>
-                    <div class="time-unit">
-                        <div class="time-value" id="minutesCount">45</div>
-                        <div class="time-label">分钟</div>
-                    </div>
-                    <div class="time-unit">
-                        <div class="time-value" id="secondsCount">30</div>
-                        <div class="time-label">秒</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 女生头像 -->
-            <div class="avatar-card">
-                <img src="https://pic1.imgdb.cn/item/67c42948d0e0a243d40a15cd.jpg" alt="女生">
-            </div>
+            <img src="https://pic1.imgdb.cn/item/67c42948d0e0a243d40a15cf.jpg" class="avatar">
+            <div class="heart">❤</div>
+            <img src="https://pic1.imgdb.cn/item/67c42948d0e0a243d40a15cd.jpg" class="avatar">
         </div>
-    </div>
-</section>
+        <div class="timer" id="loveTimer">相遇天数：0天 0时 0分 0秒</div>
+    </section>
 
-<!-- 对话板块 -->
-<section class="section dialogue-section">
-    <div class="container">
-        <div class="dialogue-container">
-            <!-- 左侧对话 -->
-            <div class="dialogue-bubble bubble-left glass-effect">
-                <p class="h1">"我想要不止这个夏天，还有未来的每一个季节"</p>
-                <small>—— 他</small>
+    <!-- 语录 -->
+    <section class="quotes-section">
+        <div class="quote-card">
+            <div class="quote-content">“直道相思了无益，未妨惆怅是清狂...”</div>
+            <div class="quote-content">“直道相思了无益，未妨惆怅是清狂...”</div>
+            <div class="quote-content"></div></br>
+            <div class="quote-content"></div></br>
+            <div class="quote-content"></div></br>
+            <div class="quote-content">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;--"三木"</div>
+        </div>
+        <div class="quote-card">
+            <div class="quote-content">“山无陵，江水为竭，冬雷震震，夏雨雪，天地合，乃敢与君绝...”</div>
+            <div class="quote-content">“山无陵，江水为竭，冬雷震震，夏雨雪，天地合，乃敢与君绝...”</div>
+            <div class="quote-content">	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;--"阿卓"</div>
+        </div>
+    </section>
+
+    <!-- 相册 -->
+    <section class="gallery-container">
+        <div class="gallery-section">
+            <div class="photo-item">
+                <img src="https://pic1.imgdb.cn/item/67c43327d0e0a243d40a1fb4.jpg" alt="我们的照片">
+            </div>
+            <div class="photo-item">
+                <img src="https://pic1.imgdb.cn/item/67c3edd7d0e0a243d4099efc.png" alt="我们的照片">
+            </div>
+            <div class="photo-item">
+                <img src="https://pic1.imgdb.cn/item/67c42948d0e0a243d40a15cd.jpg" alt="我们的照片">
             </div>
 
-            <!-- 右侧对话 -->
-            <div class="dialogue-bubble bubble-right glass-effect">
-                <p class="h4">"你是我永不褪色的心动讯号"</p>
-                <small>—— 她</small>
+
+            <div class="photo-item">
+                <img src="https://pic1.imgdb.cn/item/67c43326d0e0a243d40a1fb2.jpg" alt="我们的照片">
             </div>
-        </div>
-    </div>
-</section>
-
-<!-- 相册板块 -->
-<section class="section gallery-section">
-    <div class="container">
-        <!-- 轮播图 -->
-        <div class="carousel-container glass-effect">
-            <div class="carousel-track" id="carouselTrack"></div>
-        </div>
-
-        <!-- 瀑布流相册 -->
-        <div class="masonry-grid">
-            <div class="masonry-item glass-effect">
-                <a href="https://source.unsplash.com/1200x800/?couple,kiss" data-lightbox="gallery">
-                    <img src="https://source.unsplash.com/400x600/?couple" alt="回忆">
-                </a>
+            <div class="photo-item">
+                <img src="https://pic1.imgdb.cn/item/67c43326d0e0a243d40a1fb3.jpg" alt="我们的照片">
             </div>
-            <!-- 更多图片项 -->
-        </div>
-    </div>
-</section>
-
-<!-- 留言板块 -->
-<section class="section message-section">
-    <div class="container">
-        <div class="message-card glass-effect">
-            <div class="row">
-                <!-- 他的留言 -->
-                <div class="col-md-6 mb-4">
-                    <div class="p-4">
-                        <h5 class="text-primary">❤ 他 ❤</h5>
-                        <p class="mb-0">"我会永远做你的专属天气预报员"</p>
-                    </div>
-                </div>
-
-                <!-- 她的留言 -->
-                <div class="col-md-6 mb-4">
-                    <div class="p-4">
-                        <h5 class="text-danger">❤ 她 ❤</h5>
-                        <p class="mb-0">"你是我人生最美好的收藏品"</p>
-                    </div>
-                </div>
+            <div class="photo-item">
+                <img src="https://pic1.imgdb.cn/item/67c43367d0e0a243d40a1fbc.png" alt="我们的照片">
             </div>
+            <div class="photo-item">
+                <img src="https://pic1.imgdb.cn/item/67c43306d0e0a243d40a1fa8.jpg" alt="我们的照片">
+            </div>
+            <div class="photo-item">
+                <img src="https://pic1.imgdb.cn/item/67c43304d0e0a243d40a1fa3.jpg" alt="我们的照片">
+            </div>
+            <div class="photo-item">
+                <img src="https://pic1.imgdb.cn/item/67c4337dd0e0a243d40a1fbf.png" alt="我们的照片">
+            </div>
+            <div class="photo-item">
+                <img src="https://pic1.imgdb.cn/item/67c4337dd0e0a243d40a1fc1.png" alt="我们的照片">
+            </div>
+            <div class="photo-item">
+                <img src="https://pic1.imgdb.cn/item/67c43326d0e0a243d40a1fb1.jpg" alt="我们的照片">
+            </div>
+
+
+
+            <div class="photo-item">
+                <img src="https://pic1.imgdb.cn/item/67c43326d0e0a243d40a1fb2.jpg" alt="我们的照片">
+            </div>
+            <div class="photo-item">
+                <img src="https://pic1.imgdb.cn/item/67c43326d0e0a243d40a1fb3.jpg" alt="我们的照片">
+            </div>
+            <div class="photo-item">
+                <img src="https://pic1.imgdb.cn/item/67c43367d0e0a243d40a1fbc.png" alt="我们的照片">
+            </div>
+            <div class="photo-item">
+                <img src="https://pic1.imgdb.cn/item/67c43306d0e0a243d40a1fa8.jpg" alt="我们的照片">
+            </div>
+            <div class="photo-item">
+                <img src="https://pic1.imgdb.cn/item/67c43304d0e0a243d40a1fa3.jpg" alt="我们的照片">
+            </div>
+            <div class="photo-item">
+                <img src="https://pic1.imgdb.cn/item/67c4337dd0e0a243d40a1fbf.png" alt="我们的照片">
+            </div>
+            <div class="photo-item">
+                <img src="https://pic1.imgdb.cn/item/67c4337dd0e0a243d40a1fc1.png" alt="我们的照片">
+            </div>
+            <!-- 添加更多图片 -->
         </div>
-    </div>
-</section>
+    </section>
+</div>
 
 <script>
-    // ===== 轮播图功能 =====
-    const photos = [
-        'https://pic1.imgdb.cn/item/67c3edb9d0e0a243d4099ebb.png',
-        'https://pic1.imgdb.cn/item/67c3edc7d0e0a243d4099eda.png',
-        'https://pic1.imgdb.cn/item/67c3edcdd0e0a243d4099eea.png',
-        'https://pic1.imgdb.cn/item/67c42948d0e0a243d40a15cf.jpg'
-    ];
+    // ===================== 初始化配置 =====================
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    let fps = 30, then = Date.now(), interval = 1000/fps;
 
-    let currentIndex = 0;
-    const track = document.getElementById('carouselTrack');
-    let autoPlayInterval;
-    let isTransitioning = false;
+    // ===================== Canvas元素 =====================
+    const starsCanvas = document.getElementById('stars');
+    const starsCtx = starsCanvas.getContext('2d');
+    let stars = [];
 
-    // 初始化轮播图
-    function initCarousel() {
-        photos.forEach((src, index) => {
-            const item = createItem(src, index);
-            track.appendChild(item);
-        });
-        // 添加第一个项目的克隆用于无缝过渡
-        track.appendChild(createItem(photos[0], 0));
-        updateActiveClass();
-    }
+    const codeCanvas = document.getElementById('code-rain');
+    const codeCtx = codeCanvas.getContext('2d');
+    const chars = '◊✦✧✶✷✹✺';
+    let drops = [];
 
-    // 创建轮播项
-    function createItem(src, index) {
-        const item = document.createElement('div');
-        item.className = `carousel-item ${index === 0 ? 'active' : ''}`;
-        item.innerHTML = `<img src="${src}" class="carousel-image">`;
-        return item;
-    }
+    // ===================== 星空和代码雨动画 =====================
+    const initStars = () => {
+        stars = [];
+        const starCount = isMobile ? 150 : 400;
 
-    // 更新激活状态
-    function updateActiveClass() {
-        Array.from(track.children).forEach((item, index) => {
-            item.classList.toggle('active', index === currentIndex);
-        });
-    }
-
-    // 处理过渡结束
-    function handleTransitionEnd() {
-        if (currentIndex === photos.length) {
-            track.style.transition = 'none';
-            currentIndex = 0;
-            track.style.transform = 'translateX(0)';
-            setTimeout(() => {
-                track.style.transition = 'transform 0.8s cubic-bezier(0.33, 1, 0.68, 1)';
-            }, 10);
+        for(let i = 0; i < starCount; i++) {
+            stars.push({
+                x: Math.random() * starsCanvas.width,
+                y: Math.random() * starsCanvas.height,
+                size: Math.random() * 2,
+                alpha: Math.random() * 0.5 + 0.3,
+                vx: (Math.random() * 0.3 + 0.2) * (Math.random() < 0.5 ? -1 : 1)
+            });
         }
-        isTransitioning = false;
-        updateActiveClass();
-    }
+    };
 
-    // 下一张
-    function nextSlide() {
-        if (isTransitioning) return;
-        isTransitioning = true;
-        currentIndex++;
-        track.style.transform = `translateX(-${currentIndex * 100}%)`;
-        updateActiveClass();
-    }
+    const drawStars = () => {
+        starsCtx.fillStyle = '#000';
+        starsCtx.fillRect(0, 0, starsCanvas.width, starsCanvas.height);
 
-    // 自动播放
-    function startAutoPlay() {
-        autoPlayInterval = setInterval(() => {
-            nextSlide();
-        }, 3000);
-    }
+        stars.forEach(star => {
+            star.x += star.vx;
+            if(star.x < 0) star.x = starsCanvas.width;
+            if(star.x > starsCanvas.width) star.x = 0;
 
-    // 触摸事件处理
-    let touchStartX = 0;
-    let touchEndX = 0;
-    const swipeThreshold = 50;
+            starsCtx.beginPath();
+            starsCtx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+            starsCtx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+            starsCtx.fill();
 
-    track.addEventListener('touchstart', e => {
-        touchStartX = e.touches[0].clientX;
-    });
+            if(Math.random() < 0.008) star.alpha = Math.random() * 0.5 + 0.3;
+        });
+    };
 
-    track.addEventListener('touchmove', e => {
-        touchEndX = e.touches[0].clientX;
-    });
+    const initCodeRain = () => {
+        codeCanvas.width = window.innerWidth;
+        codeCanvas.height = window.innerHeight;
+        const fontSize = isMobile ? 18 : 24;
+        const columns = Math.min(window.innerWidth / (isMobile ? 22 : 28), 80);
 
-    track.addEventListener('touchend', () => {
-        const deltaX = touchEndX - touchStartX;
-        if (Math.abs(deltaX) > swipeThreshold) {
-            deltaX > 0 ? prevSlide() : nextSlide();
+        drops = [];
+        for(let i = 0; i < columns; i++) {
+            drops[i] = Math.random() * -codeCanvas.height;
         }
-        touchStartX = 0;
-        touchEndX = 0;
-    });
+    };
 
-    // 初始化
-    initCarousel();
-    track.addEventListener('transitionend', handleTransitionEnd);
-    startAutoPlay();
+    const drawCodeRain = () => {
+        codeCtx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        codeCtx.fillRect(0, 0, codeCanvas.width, codeCanvas.height);
 
-    // 悬停暂停
-    track.addEventListener('mouseenter', () => clearInterval(autoPlayInterval));
-    track.addEventListener('mouseleave', startAutoPlay);
+        codeCtx.fillStyle = '#00a6ff';
+        codeCtx.font = `${isMobile ? 18 : 24}px monospace`;
 
-    // ===== 时间计算 =====
-    const startDate = new Date('2023-01-01');
-    function updateTime() {
+        drops.forEach((drop, i) => {
+            const text = chars[Math.floor(Math.random() * chars.length)];
+            codeCtx.fillText(text, i * (isMobile ? 18 : 24), drop);
+
+            if(drop > codeCanvas.height && Math.random() > 0.97) {
+                drops[i] = 0;
+            }
+            drops[i] += isMobile ? 2 : 3;
+        });
+    };
+
+    const optimizedDraw = () => {
+        requestAnimationFrame(() => {
+            const now = Date.now();
+            const delta = now - then;
+
+            if (delta > interval) {
+                then = now - (delta % interval);
+                drawStars();
+                drawCodeRain();
+            }
+            optimizedDraw();
+        });
+    };
+
+    // ===================== 情侣界面功能 =====================
+    // 恋爱计时器
+    function updateTimer() {
+        const startDate = new Date("2025-02-01"); // 设置你们的开始日期
         const now = new Date();
         const diff = now - startDate;
 
-        const days = Math.floor(diff / 86400000);
-        const hours = Math.floor((diff % 86400000) / 3600000);
-        const minutes = Math.floor((diff % 3600000) / 60000);
-        const seconds = Math.floor((diff % 60000) / 1000);
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-        // 更新显示
-        document.getElementById('daysCount').textContent = days;
-        document.getElementById('hoursCount').textContent = hours.toString().padStart(2, '0');
-        document.getElementById('minutesCount').textContent = minutes.toString().padStart(2, '0');
-        document.getElementById('secondsCount').textContent = seconds.toString().padStart(2, '0');
-
-        // 精准定时
-        setTimeout(updateTime, 1000 - (now % 1000));
+        document.getElementById('loveTimer').innerHTML =
+            `相遇天数：${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
     }
-    updateTime();
+    setInterval(updateTimer, 1000);
 
-    // ===== 头像交互 =====
-    document.querySelectorAll('.avatar-card').forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const rotateY = (e.clientX - rect.left - rect.width/2) / 8;
-            const rotateX = -(e.clientY - rect.top - rect.height/2) / 8;
+    // 图片点击放大功能
+    document.querySelectorAll('.photo-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.9);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 999;
+                    cursor: pointer;
+                `;
+            const img = document.createElement('img');
+            img.src = item.querySelector('img').src;
+            img.style.maxWidth = '90%';
+            img.style.maxHeight = '90%';
+            img.style.borderRadius = '10px';
 
-            card.style.transform = `
-                    perspective(800px)
-                    rotateX(${rotateX}deg)
-                    rotateY(${rotateY}deg)
-                    scale(1.05)`;
-        });
+            modal.appendChild(img);
+            document.body.appendChild(modal);
 
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'perspective(800px) rotateX(0) rotateY(0)';
+            modal.addEventListener('click', () => modal.remove());
         });
     });
 
-    // ===== 音乐控制 =====
-    const audio = document.getElementById('bgm');
-    let isPlaying = false;
+    // ===================== 初始化入口 =====================
+    window.addEventListener('load', () => {
+        setTimeout(() => window.scrollTo(0, 1), 0);
+        starsCanvas.width = window.innerWidth;
+        starsCanvas.height = window.innerHeight;
+        codeCanvas.width = window.innerWidth;
+        codeCanvas.height = window.innerHeight;
+        initStars();
+        initCodeRain();
+        optimizedDraw();
+    });
 
-    function toggleMusic() {
-        isPlaying ? audio.pause() : audio.play().catch(() => {
-            alert('请点击页面任意位置允许播放音乐');
-        });
-        isPlaying = !isPlaying;
-    }
-
-    // ===== 自动播放处理 =====
-    document.addEventListener('click', () => !isPlaying && toggleMusic(), {once: true});
+    window.addEventListener('resize', () => {
+        starsCanvas.width = window.innerWidth;
+        starsCanvas.height = window.innerHeight;
+        codeCanvas.width = window.innerWidth;
+        codeCanvas.height = window.innerHeight;
+        initStars();
+        initCodeRain();
+    });
 </script>
 </body>
 </html>
